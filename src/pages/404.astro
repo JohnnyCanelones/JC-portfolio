@@ -1,0 +1,14 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { localePath, t } from '../i18n';
+---
+
+<BaseLayout title={t('en', 'pageNotFound')} noindex>
+  <div class="preview-shell">
+    <p class="font-mono text-sm text-accent">404</p>
+    <h1 class="mt-4 text-4xl font-semibold tracking-tight">{t('en', 'pageNotFound')}</h1>
+    <a class="mt-8 inline-block text-accent underline underline-offset-4" href={localePath('en')}>
+      {t('en', 'backHome')}
+    </a>
+  </div>
+</BaseLayout>

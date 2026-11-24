@@ -1,0 +1,79 @@
+---
+import { site } from '@config/site';
+import { type Locale, t } from '../i18n';
+import '@styles/global.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+  image?: string;
+  lang?: Locale;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = site.seo.defaultDescription,
+  canonicalPath = Astro.url.pathname,
+  image = site.seo.socialImage,
+  lang = site.defaultLanguage,
+  noindex = false,
+} = Astro.props;
+
+const pageTitle = title ? site.seo.titleTemplate.replace('%s', title) : site.seo.defaultTitle;
+const canonical = new URL(canonicalPath, site.url).href;
+const socialImage = new URL(image, site.url).href;
+---
+
+<!doctype html>
+<html lang={lang} data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        let preference = 'dark';
+        try {
+          const stored = localStorage.getItem('portfolio-theme');
+          if (stored === 'light' || stored === 'dark' || stored === 'system') preference = stored;
+        } catch {
+          // Storage can be unavailable; keep the dark default.
+        }
+        const media = window.matchMedia('(prefers-color-scheme: dark)');
+        const apply = () => {
+          root.dataset.theme = preference === 'system' ? (media.matches ? 'dark' : 'light') : preference;
+        };
+        apply();
+        media.addEventListener('change', apply);
+        window.addEventListener('storage', (event) => {
+          if (event.key !== 'portfolio-theme') return;
+          preference = event.newValue === 'light' || event.newValue === 'dark' || event.newValue === 'system'
+            ? event.newValue
+            : 'dark';
+          apply();
+        });
+      })();
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">{t(lang, 'skipToContent')}</a>
+    <main id="main-content"><slot /></main>
+  </body>
+</html>
