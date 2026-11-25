@@ -1,0 +1,13 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import { Image } from 'astro:assets';
+import portrait from '@assets/johnny-portrait.png';
+import { site } from '@config/site';
+import { useTranslations } from '@i18n';
+const en = useTranslations('en'); const es = useTranslations('es');
+---
+<PageLayout title={en.about.pageTitle} description={en.about.pageDescription} localizedTitle={es.about.pageTitle} localizedDescription={es.about.pageDescription} structuredData={{'@context':'https://schema.org','@type':'ProfilePage',inLanguage:['en','es'],mainEntity:{'@type':'Person','@id':`${site.url}/#person`,name:site.fullName,jobTitle:[en.hero.role,es.hero.role],sameAs:[site.linkedInUrl]}}}>
+ <div class="page-container editorial-page"><header class="article-header"><p class="section-kicker" data-copy-en={en.about.pageKicker} data-copy-es={es.about.pageKicker}>{en.about.pageKicker}</p><h1 data-copy-en={en.about.pageHeading} data-copy-es={es.about.pageHeading}>{en.about.pageHeading}</h1></header>
+ <div class="article-grid"><div><Image src={portrait} alt={en.about.portraitAlt} data-alt-en={en.about.portraitAlt} data-alt-es={es.about.portraitAlt} widths={[320,480,720]} sizes="(max-width:48rem) 90vw, 25vw" format="webp" loading="eager" /><p class="project-meta" data-copy-en={en.about.location} data-copy-es={es.about.location}>{en.about.location}</p></div>
+ <article class="prose"><h2 data-copy-en={en.about.backgroundTitle} data-copy-es={es.about.backgroundTitle}>{en.about.backgroundTitle}</h2><p data-copy-en={en.about.background} data-copy-es={es.about.background}>{en.about.background}</p><h2 data-copy-en={en.about.approachTitle} data-copy-es={es.about.approachTitle}>{en.about.approachTitle}</h2><p data-copy-en={en.about.approach} data-copy-es={es.about.approach}>{en.about.approach}</p><h2 data-copy-en={en.about.teamTitle} data-copy-es={es.about.teamTitle}>{en.about.teamTitle}</h2><p data-copy-en={en.about.team} data-copy-es={es.about.team}>{en.about.team}</p><h2 data-copy-en={en.about.focusTitle} data-copy-es={es.about.focusTitle}>{en.about.focusTitle}</h2><p data-copy-en={en.about.focus} data-copy-es={es.about.focus}>{en.about.focus}</p><p><span data-copy-en={en.about.closing} data-copy-es={es.about.closing}>{en.about.closing}</span> <a href="/contact/" data-copy-en={en.about.getInTouch} data-copy-es={es.about.getInTouch}>{en.about.getInTouch}</a> or <a href="/experience/" data-copy-en={en.about.readExperience} data-copy-es={es.about.readExperience}>{en.about.readExperience}</a>.</p></article></div></div>
+</PageLayout>

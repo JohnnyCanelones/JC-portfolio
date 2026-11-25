@@ -1,0 +1,139 @@
+import type { TranslationShape } from '../types';
+import type { en } from './en';
+
+export const es = {
+  meta: {
+    defaultTitle: 'Johnny Canelones | Ingeniero de Software Full-Stack',
+    defaultDescription:
+      'Construyo aplicaciones web y sistemas backend, con experiencia en aviación, finanzas y datos geoespaciales.',
+    titleTemplate: '%s | Johnny Canelones',
+  },
+  common: {
+    skipToContent: 'Saltar al contenido',
+    home: 'Inicio',
+    projects: 'Proyectos',
+    writing: 'Artículos',
+    read: 'Leer',
+    minRead: 'min de lectura',
+    updated: 'Actualizado',
+    onThisPage: 'En esta página',
+    relatedWork: 'Trabajo relacionado',
+    contribution: 'Contribución',
+    context: 'Contexto',
+    technology: 'Tecnología',
+    personalProject: 'Proyecto personal',
+    independentDevelopment: 'Desarrollo independiente',
+    sourceCode: 'Código fuente',
+    suppliedScreenshot: 'Captura de pantalla suministrada del producto.',
+    pageNotFound: 'Página no encontrada',
+    backHome: 'Volver al inicio',
+  },
+  nav: {
+    label: 'Navegación principal',
+    work: 'Proyectos',
+    experience: 'Experiencia',
+    about: 'Sobre mí',
+    contact: 'Contacto',
+    wordmark: 'JC, Johnny Canelones, inicio',
+  },
+  language: {
+    label: 'Idioma',
+    unavailable: 'Esta página no está disponible en inglés. El enlace lleva al inicio en inglés.',
+  },
+  theme: {
+    label: 'Tema',
+    control: 'Tema de color',
+    system: 'Sistema',
+    light: 'Claro',
+    dark: 'Oscuro',
+  },
+  hero: {
+    role: 'Ingeniero de Software Full-Stack',
+    based: 'En Ecuador',
+    intro:
+      'Construyo aplicaciones web y sistemas backend, con experiencia en aviación, finanzas y datos geoespaciales.',
+    availability: 'Disponible para oportunidades remotas de ingeniería de software.',
+    selectedWork: 'Proyectos seleccionados',
+    resume: 'Currículum en inglés',
+  },
+  work: {
+    kicker: 'Proyectos seleccionados',
+    title: 'Productos definidos por restricciones reales.',
+    intro:
+      'Trabajo personal y contribuciones seleccionadas en finanzas, datos ambientales, aviación, medios y software documental.',
+    directoryKicker: 'Directorio de proyectos',
+    directoryTitle: 'Software, con contexto.',
+    directoryIntro:
+      'Productos personales y contribuciones profesionales. Cada caso explica mi alcance, el sistema que lo rodea y las decisiones de ingeniería detrás del trabajo.',
+    personal: 'Proyecto personal',
+    professional: 'Contribuciones profesionales',
+    additional: 'Otros proyectos seleccionados',
+    visitProject: 'Visitar proyecto',
+    visit: 'Visitar',
+    signInCaption: 'WealthOS / pantalla de inicio de sesión',
+  },
+  experience: {
+    kicker: 'Experiencia',
+    title: 'Ingeniería en distintos sectores.',
+    intro:
+      'Trabajo en plataformas web, experiencias móviles, datos ambientales y sistemas financieros.',
+    pageKicker: 'Experiencia profesional',
+    pageDeck:
+      'Desarrollo frontend y backend, desde flujos financieros hasta experiencias móviles de lectura y reproducción.',
+    downloadResume: 'Descargar currículum en inglés',
+    caseStudy: 'Leer el caso de %s',
+    present: 'Actualidad',
+  },
+  expertise: { kicker: 'Práctica', title: 'A través del stack, cerca del producto.' },
+  about: {
+    kicker: 'Sobre mí',
+    title: 'Un poco sobre mi forma de trabajar.',
+    lead: 'Construyo software que tiene que funcionar más allá de una demostración: para personas que reservan vuelos, navegan datos ambientales, administran sus finanzas o buscan respuestas en documentos.',
+    body: 'Mi trabajo se mueve entre el frontend y el backend. Me importan la arquitectura clara, las interfaces útiles y los detalles prácticos que mantienen un producto confiable.',
+    leadership:
+      'He liderado un equipo pequeño de desarrollo y colaborado con equipos distribuidos en distintas industrias. Disfruto convertir flujos complejos en herramientas sencillas de usar.',
+    pageTitle: 'Sobre mí',
+    pageDescription:
+      'Cómo Johnny Canelones aborda la ingeniería frontend y backend, el liderazgo técnico y el desarrollo de producto.',
+    pageKicker: 'Sobre mí',
+    pageHeading: 'A través del stack. Cerca del producto.',
+    portraitAlt: 'Johnny Canelones con lentes, sentado en un espacio interior.',
+    location: 'Ecuador · Oportunidades remotas',
+    backgroundTitle: 'Mi trayectoria',
+    background:
+      'Soy Johnny Canelones, ingeniero de software full-stack en Ecuador. He trabajado en sistemas contables, experiencias de reserva aérea, plataformas de datos ambientales e interfaces para leer e interactuar con documentos.',
+    approachTitle: 'Cómo abordo la ingeniería',
+    approach:
+      'Mi trabajo conecta el comportamiento del frontend con las responsabilidades del backend: la información que necesita una interfaz, cómo la expone una API y qué ocurre cuando falla una solicitud o cambia la conectividad. Me importa que esos límites sean claros y mantenibles a medida que evoluciona el producto.',
+    teamTitle: 'Trabajo en equipo',
+    team: 'En GlobalFinances lideré un equipo de tres desarrolladores mientras contribuía a software contable y de facturación electrónica. Mis otros roles han requerido colaboración entre frontend, backend y producto.',
+    focusTitle: 'Enfoque actual',
+    focus:
+      'WealthOS es mi espacio personal para explorar flujos financieros, sincronización sin conexión y automatización controlada. Me interesa aplicar automatización cuando sus resultados se puedan validar y el usuario pueda revisar decisiones importantes.',
+    closing: 'Disponible para oportunidades remotas de ingeniería de software.',
+    getInTouch: 'Contáctame',
+    readExperience: 'lee mi experiencia',
+  },
+  contact: {
+    kicker: 'Contacto',
+    title: 'Hablemos.',
+    copy: 'Estoy en Ecuador y disponible para oportunidades remotas de ingeniería de software. Si mi experiencia encaja con lo que estás construyendo, me gustaría conocer el proyecto.',
+    email: 'Escríbeme',
+    pageDescription:
+      'Contacta a Johnny Canelones para oportunidades remotas de ingeniería de software.',
+    pageDeck:
+      'Disponible para oportunidades remotas de ingeniería de software. Estoy en Ecuador y trabajo tanto en frontend como en backend.',
+    resumeEnglish: 'Descargar currículum en inglés',
+  },
+  footer: { remote: 'Ecuador · Remoto' },
+  blog: {
+    title: 'Artículos',
+    description:
+      'Notas técnicas sobre arquitectura de aplicaciones, ingeniería frontend y entrega de software.',
+    kicker: 'Escritura técnica',
+    heading: 'Notas desde el trabajo.',
+    draft: 'Vista local no publicada',
+    more: 'Más artículos',
+  },
+  notFound: { description: 'No se encontró la página solicitada.' },
+} as const satisfies TranslationShape<typeof en>;

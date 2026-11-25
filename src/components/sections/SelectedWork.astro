@@ -1,0 +1,92 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import ProjectGallery from '@components/projects/ProjectGallery.astro';
+import { useTranslations } from '@i18n';
+
+interface Props {
+  projects: CollectionEntry<'projects'>[];
+  translations?: CollectionEntry<'projects'>[];
+  directory?: boolean;
+}
+
+const { projects, translations = [], directory = false } = Astro.props;
+const en = useTranslations('en'); const es = useTranslations('es');
+const translated = (id: string) => translations.find((project) => project.data.translationId === id)?.data;
+const featured = projects.find(({ data }) => data.presentation === 'feature');
+const editorial = projects.find(({ data }) => data.presentation === 'editorial');
+const compact = projects.filter(({ data }) => data.presentation === 'text');
+---
+
+<section id="work" class:list={["section page-container", {"project-directory": directory}]} aria-labelledby="work-title">
+  {!directory && <div class="section-head">
+    <p class="section-kicker" data-copy-en={en.work.kicker} data-copy-es={es.work.kicker}>{en.work.kicker}</p>
+    <div>
+      <h2 id="work-title" class="section-title" data-copy-en={en.work.title} data-copy-es={es.work.title}>{en.work.title}</h2>
+      <p class="section-intro" data-copy-en={en.work.intro} data-copy-es={es.work.intro}>{en.work.intro}</p>
+    </div>
+  </div>}
+  {directory && <h2 id="work-title" class="directory-group" data-copy-en={en.work.personal} data-copy-es={es.work.personal}>{en.work.personal}</h2>}
+
+  {featured && (
+    <article class="feature" aria-labelledby="feature-title">
+      {featured.data.coverImage ? (
+        <figure class="feature-shot">
+          <Image
+            src={featured.data.coverImage}
+            alt="WealthOS sign-in page with a burgundy introduction panel and a dark login form."
+            widths={[480, 768, 1200]}
+            sizes="(max-width: 48rem) calc(100vw - 2.25rem), 60vw"
+            format="webp"
+            loading={directory ? "eager" : "lazy"}
+            fetchpriority={directory ? "high" : undefined}
+            decoding="async"
+          />
+          <figcaption data-copy-en={en.work.signInCaption} data-copy-es={es.work.signInCaption}>{en.work.signInCaption}</figcaption>
+        </figure>
+      ) : (
+        <div class="feature-art" aria-hidden="true">
+          <div class="feature-art-top"><span>Personal project</span><span>Financial technology</span></div>
+          <div class="feature-art-word">Wealth<span class="feature-art-suffix">OS</span></div>
+          <div class="feature-art-bottom"><span>Track / understand / automate</span><span>W.</span></div>
+        </div>
+      )}
+      <div class="feature-copy">
+        <p class="project-meta" data-copy-en={featured.data.category} data-copy-es={translated(featured.data.translationId)?.category}>{featured.data.category}</p>
+        <h3 id="feature-title" class="project-title"><a href={`/projects/${featured.data.slug}/`}>{featured.data.title}</a></h3>
+        <p class="project-description" data-copy-en={featured.data.description} data-copy-es={translated(featured.data.translationId)?.description}>{featured.data.description}</p>
+        <p class="project-tech">{featured.data.technologies.join(' · ')}</p>
+        {featured.data.demoUrl && <a class="text-link" href={featured.data.demoUrl}><span data-copy-en="Visit WealthOS" data-copy-es="Visitar WealthOS">Visit WealthOS</span> <span aria-hidden="true">↗</span></a>}
+      </div>
+    </article>
+  )}
+
+  {directory && <h2 class="directory-group" data-copy-en={en.work.professional} data-copy-es={es.work.professional}>{en.work.professional}</h2>}
+  {editorial && (
+    <article class="editorial-project" aria-labelledby="editorial-title">
+      {editorial.data.gallery ? <ProjectGallery slides={editorial.data.gallery} translatedSlides={translated(editorial.data.translationId)?.gallery} /> : <div class="editorial-art" aria-hidden="true"><span class="editorial-art-letter">GJD</span></div>}
+      <div class="editorial-copy">
+        <p class="project-meta" data-copy-en={`${editorial.data.category} · ${editorial.data.role}`} data-copy-es={`${translated(editorial.data.translationId)?.category} · ${translated(editorial.data.translationId)?.role}`}>{editorial.data.category} · {editorial.data.role}</p>
+        <h3 id="editorial-title" class="project-title"><a href={`/projects/${editorial.data.slug}/`}>{editorial.data.title}</a></h3>
+        <p class="project-description" data-copy-en={editorial.data.description} data-copy-es={translated(editorial.data.translationId)?.description}>{editorial.data.description}</p>
+        <p class="project-tech">{editorial.data.technologies.join(' · ')}</p>
+        {editorial.data.demoUrl && <a class="text-link" href={editorial.data.demoUrl}><span data-copy-en={en.work.visitProject} data-copy-es={es.work.visitProject}>{en.work.visitProject}</span> <span aria-hidden="true">↗</span></a>}
+      </div>
+    </article>
+  )}
+
+  <div class="project-list" aria-label={en.work.additional} data-label-en={en.work.additional} data-label-es={es.work.additional}>
+    {compact.map(({ data }) => (
+      <article class="project-list-item">
+        <h3><a href={`/projects/${data.slug}/`}>{data.title}</a></h3>
+        <p data-copy-en={data.description} data-copy-es={translated(data.translationId)?.description}>{data.description}</p>
+        <div>
+          <p class="project-meta" data-copy-en={`${data.category} · ${data.role}`} data-copy-es={`${translated(data.translationId)?.category} · ${translated(data.translationId)?.role}`}>{data.category} · {data.role}</p>
+          <p class="project-tech">{data.technologies.join(' · ')}</p>
+          {data.demoUrl && <a class="text-link" href={data.demoUrl}><span data-copy-en={`Visit ${data.title}`} data-copy-es={`Visitar ${data.title}`}>Visit {data.title}</span> <span aria-hidden="true">↗</span></a>}
+          {data.links && <div class="project-links">{data.links.map((link) => <a class="text-link" href={link.url}><span data-copy-en={`Visit ${link.label}`} data-copy-es={`Visitar ${link.label}`}>Visit {link.label}</span> <span aria-hidden="true">↗</span></a>)}</div>}
+        </div>
+      </article>
+    ))}
+  </div>
+</section>

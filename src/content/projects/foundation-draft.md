@@ -1,4 +1,7 @@
 ---
+slug: foundation-draft
+translationId: foundation-draft
+projectType: personal
 title: 'DRAFT — replace with a real project'
 description: 'Schema validation entry only. Do not publish.'
 category: 'placeholder'

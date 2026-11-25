@@ -1,0 +1,330 @@
+.editorial-page {
+  padding-block: clamp(2rem, 5vw, 4rem) var(--section-space);
+}
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  font-size: var(--meta-size);
+  font-family: var(--type-mono);
+  color: var(--muted-foreground);
+}
+.breadcrumbs a {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+.article-header {
+  padding-block: clamp(3rem, 7vw, 6rem);
+  border-block-end: 1px solid var(--border);
+}
+.article-header h1,
+.page-heading {
+  max-inline-size: 20ch;
+  margin-block: 0.75rem 1.5rem;
+  font-family: var(--type-serif);
+  font-weight: 400;
+  font-size: var(--page-size);
+  letter-spacing: -0.055em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+.article-deck {
+  max-inline-size: 46ch;
+  font-size: clamp(1.2rem, 1rem + 0.6vw, 1.6rem);
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+.article-date {
+  font-family: var(--type-mono);
+  font-size: var(--meta-size);
+}
+.article-grid {
+  display: grid;
+  grid-template-columns: minmax(10rem, 1fr) minmax(0, 3fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  padding-block: 3rem;
+}
+.article-toc {
+  align-self: start;
+  position: sticky;
+  inset-block-start: calc(var(--header-height) + 2rem);
+  font-size: var(--support-size);
+}
+.article-toc p {
+  margin-block: 0 1rem;
+  color: var(--accent);
+  font-family: var(--type-mono);
+  font-size: var(--meta-size);
+}
+.article-toc ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-inline-start: 1px solid var(--border);
+}
+.article-toc a {
+  display: block;
+  padding: 0.4rem 0 0.4rem 1rem;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.2em;
+}
+:where(.article-toc) a:hover,
+:where(.article-toc) a:focus-visible {
+  text-decoration-color: currentColor;
+  color: var(--accent);
+}
+.article-toc .toc-nested {
+  padding-inline-start: 1rem;
+  font-size: 0.85em;
+}
+.prose {
+  max-inline-size: 68ch;
+  min-inline-size: 0;
+  line-height: 1.8;
+}
+.prose > :first-child {
+  margin-block-start: 0;
+}
+.prose h2 {
+  margin-block: 3rem 1rem;
+  font-family: var(--type-serif);
+  font-size: var(--section-size);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+}
+.prose h3 {
+  margin-block: 2rem 0.7rem;
+  font-size: 1.3rem;
+  line-height: 1.35;
+}
+.prose p {
+  margin-block: 1rem;
+  text-wrap: pretty;
+}
+.prose ul,
+.prose ol {
+  padding-inline-start: 1.5rem;
+}
+.prose ul {
+  list-style: disc;
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose li {
+  margin-block: 0.45rem;
+}
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.prose blockquote {
+  margin-inline: 0;
+  padding-inline-start: 1.5rem;
+  border-inline-start: 3px solid var(--accent);
+  color: var(--muted-foreground);
+}
+.prose pre {
+  max-inline-size: 100%;
+  overflow: auto;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+  line-height: 1.65;
+}
+.prose code {
+  font-family: var(--type-mono);
+  overflow-wrap: normal;
+}
+.prose :not(pre) > code {
+  overflow-wrap: anywhere;
+  font-size: 0.85em;
+  background: var(--surface);
+  padding: 0.1em 0.3em;
+}
+.prose figure {
+  margin-inline: 0;
+  margin-block: 2.5rem;
+}
+.prose img {
+  inline-size: 100%;
+  block-size: auto;
+}
+.prose figcaption {
+  margin-block-start: 0.75rem;
+  color: var(--muted-foreground);
+  font-size: var(--support-size);
+}
+.table-scroll {
+  max-inline-size: 100%;
+  overflow: auto;
+}
+.prose table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--support-size);
+}
+.prose th,
+.prose td {
+  border-block-end: 1px solid var(--border);
+  padding: 0.75rem;
+  text-align: start;
+  vertical-align: top;
+}
+.prose th {
+  color: var(--accent);
+}
+.project-metadata {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-block: 2rem 0;
+}
+.project-metadata dt {
+  font-family: var(--type-mono);
+  color: var(--accent);
+  font-size: var(--meta-size);
+  margin-block-end: 0.4rem;
+}
+.project-metadata dd {
+  margin: 0;
+  font-size: var(--support-size);
+}
+.related-content {
+  border-block-start: 1px solid var(--border);
+  padding-block-start: 2rem;
+}
+.related-content h2 {
+  font-family: var(--type-serif);
+  font-weight: 400;
+  font-size: 2rem;
+}
+.related-content ul {
+  padding: 0;
+  list-style: none;
+}
+.related-content li {
+  padding-block: 1rem;
+  border-block-end: 1px solid var(--border);
+}
+.related-content a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+.site-nav a[aria-current="page"] {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 0.35em;
+}
+.architecture {
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  background: var(--surface);
+}
+.architecture ol {
+  display: grid;
+  gap: 1rem;
+}
+.architecture strong {
+  color: var(--accent);
+}
+.directory-intro {
+  padding-block: var(--section-space) 3rem;
+}
+.directory-intro p {
+  max-inline-size: 52ch;
+  color: var(--muted-foreground);
+}
+@media (max-width: 48rem) {
+  .article-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .article-toc {
+    position: static;
+  }
+  .project-metadata {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .article-header {
+    padding-block: 2.5rem;
+  }
+  .nav-list {
+    flex-wrap: wrap;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .astro-code,
+  :root:not([data-theme="light"]) .astro-code span {
+    /* biome-ignore lint/complexity/noImportantStyles: Override generated syntax colors in dark mode. */
+    color: var(--shiki-dark) !important;
+    /* biome-ignore lint/complexity/noImportantStyles: Override generated syntax backgrounds in dark mode. */
+    background-color: var(--shiki-dark-bg) !important;
+  }
+}
+:root[data-theme="dark"] .astro-code,
+:root[data-theme="dark"] .astro-code span {
+  /* biome-ignore lint/complexity/noImportantStyles: Override generated syntax colors in dark mode. */
+  color: var(--shiki-dark) !important;
+  /* biome-ignore lint/complexity/noImportantStyles: Override generated syntax backgrounds in dark mode. */
+  background-color: var(--shiki-dark-bg) !important;
+}
+@media (forced-colors: active) {
+  .architecture,
+  .prose pre {
+    border-color: CanvasText;
+  }
+}
+
+.experience-heading {
+  font-family: var(--type-serif);
+  font-size: var(--project-size);
+  font-weight: 400;
+  line-height: 1.2;
+}
+.article-toc {
+  max-block-size: calc(100dvh - var(--header-height) - 4rem);
+  overflow: auto;
+}
+@media (max-width: 48rem) {
+  .article-toc {
+    max-block-size: none;
+  }
+}
+
+.project-directory {
+  padding-block-start: 1rem;
+}
+.directory-group {
+  font-family: var(--type-mono);
+  font-weight: 400;
+  font-size: var(--support-size);
+  color: var(--accent);
+  margin-block: 1rem 2rem;
+}
+.feature + .directory-group {
+  margin-block-start: var(--section-space);
+}
+@media (max-width: 48rem) {
+  .article-toc {
+    font-size: 0.85rem;
+  }
+  .article-toc ol {
+    columns: 2;
+    column-gap: 1rem;
+  }
+  .article-toc li {
+    break-inside: avoid;
+  }
+  .article-toc .toc-nested {
+    padding-inline-start: 0;
+  }
+}
+@media (max-width: 23rem) {
+  .article-toc ol {
+    columns: 1;
+  }
+}

@@ -1,0 +1,14 @@
+---
+import { site } from '@config/site';
+import { type Locale, useTranslations } from '@i18n';
+interface Props { locale?: Locale }
+const { locale = 'en' } = Astro.props;
+const messages = useTranslations(locale);
+---
+
+<footer class="site-footer">
+  <div class="page-container footer-inner">
+    <p class="footer-note">© {new Date().getFullYear()} {site.fullName}</p>
+    <p class="footer-note" data-copy-en="Ecuador · Remote" data-copy-es="Ecuador · Remoto">{messages.footer.remote}</p>
+  </div>
+</footer>

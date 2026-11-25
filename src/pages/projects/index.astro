@@ -1,0 +1,13 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import SelectedWork from '@components/sections/SelectedWork.astro';
+import { publishedProjects } from '@lib/content';
+import { useTranslations } from '@i18n';
+const projects = await publishedProjects('en');
+const translations = await publishedProjects('es');
+const en = useTranslations('en'); const es = useTranslations('es');
+---
+<PageLayout title="Projects" localizedTitle="Proyectos" description="Personal software and professional contributions across finance, environmental data, aviation, and document interfaces." localizedDescription="Software personal y contribuciones profesionales en finanzas, datos ambientales, aviación e interfaces documentales.">
+ <header class="page-container directory-intro"><p class="section-kicker" data-copy-en={en.work.directoryKicker} data-copy-es={es.work.directoryKicker}>{en.work.directoryKicker}</p><h1 class="page-heading" data-copy-en={en.work.directoryTitle} data-copy-es={es.work.directoryTitle}>{en.work.directoryTitle}</h1><p data-copy-en={en.work.directoryIntro} data-copy-es={es.work.directoryIntro}>{en.work.directoryIntro}</p></header>
+ <SelectedWork directory projects={projects} translations={translations} />
+</PageLayout>

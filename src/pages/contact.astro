@@ -1,0 +1,9 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import { site } from '@config/site';
+import { useTranslations } from '@i18n';
+const en = useTranslations('en'); const es = useTranslations('es');
+---
+<PageLayout title={en.contact.kicker} description={en.contact.pageDescription} localizedTitle={es.contact.kicker} localizedDescription={es.contact.pageDescription}>
+ <div class="page-container editorial-page"><header class="article-header"><p class="section-kicker" data-copy-en={en.contact.kicker} data-copy-es={es.contact.kicker}>{en.contact.kicker}</p><h1 data-copy-en={en.contact.title} data-copy-es={es.contact.title}>{en.contact.title}</h1><p class="article-deck" data-copy-en={en.contact.pageDeck} data-copy-es={es.contact.pageDeck}>{en.contact.pageDeck}</p><div class="text-actions"><a class="text-link" href={`mailto:${site.contactEmail}`}>{site.contactEmail} ↗</a><a class="text-link" href={site.linkedInUrl}>LinkedIn ↗</a>{site.githubUrl && <a class="text-link" href={site.githubUrl}>GitHub ↗</a>}<a class="text-link" href={site.resume.url} hreflang="en"><span data-copy-en={en.contact.resumeEnglish} data-copy-es={es.contact.resumeEnglish}>{en.contact.resumeEnglish}</span> ↗</a></div></header></div>
+</PageLayout>

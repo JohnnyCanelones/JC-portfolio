@@ -1,0 +1,112 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  slides: NonNullable<CollectionEntry<'projects'>['data']['gallery']>;
+  translatedSlides?: NonNullable<CollectionEntry<'projects'>['data']['gallery']>;
+}
+
+const { slides, translatedSlides = [] } = Astro.props;
+---
+
+<div class="project-gallery" data-project-gallery role="region" aria-roledescription="carousel" aria-label="Green Jurisdictions project screenshots" data-label-en="Green Jurisdictions project screenshots" data-label-es="Capturas del proyecto Green Jurisdictions">
+  <div class="gallery-track" data-gallery-track role="group" aria-label="Screenshots" data-label-en="Screenshots" data-label-es="Capturas" tabindex="0">
+    {slides.map((slide, index) => (
+      <figure class="gallery-slide" data-gallery-slide data-gallery-label={slide.label} role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${slides.length}: ${slide.label}`}>
+        <Image
+          src={slide.image}
+          alt={slide.alt}
+          data-alt-en={slide.alt}
+          data-alt-es={translatedSlides[index]?.alt ?? slide.alt}
+          widths={[480, 768, 1200]}
+          sizes="(max-width: 48rem) calc(100vw - 2.25rem), 40vw"
+          format="webp"
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption>
+          <span>{String(index + 1).padStart(2, '0')} / {slide.label}</span>
+          <a href={slide.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit site: ${slide.label}`} data-label-en={`Visit site: ${slide.label}`} data-label-es={`Visitar sitio: ${slide.label}`}><span data-copy-en="Visit site" data-copy-es="Visitar sitio">Visit site</span> <span aria-hidden="true">↗</span></a>
+        </figcaption>
+      </figure>
+    ))}
+  </div>
+  <div class="gallery-controls" aria-label="Screenshot controls" data-label-en="Screenshot controls" data-label-es="Controles de capturas">
+    <div class="gallery-selectors" aria-label="Choose a screenshot" data-label-en="Choose a screenshot" data-label-es="Elegir una captura">
+      {slides.map((slide, index) => (
+        <button type="button" data-gallery-select={index} aria-label={`${String(index + 1).padStart(2, '0')}: Show ${slide.label}`} data-label-en={`${String(index + 1).padStart(2, '0')}: Show ${slide.label}`} data-label-es={`${String(index + 1).padStart(2, '0')}: Mostrar ${slide.label}`} aria-current={index === 0 ? 'true' : undefined}>
+          {String(index + 1).padStart(2, '0')}
+        </button>
+      ))}
+    </div>
+    <div class="gallery-arrows">
+      <button type="button" data-gallery-previous aria-label="Previous screenshot" data-label-en="Previous screenshot" data-label-es="Captura anterior" disabled><span aria-hidden="true">←</span> <span data-copy-en="Prev" data-copy-es="Anterior">Prev</span></button>
+      <button type="button" data-gallery-next aria-label="Next screenshot" data-label-en="Next screenshot" data-label-es="Siguiente captura"><span data-copy-en="Next" data-copy-es="Siguiente">Next</span> <span aria-hidden="true">→</span></button>
+    </div>
+  </div>
+  <p class="visually-hidden" data-gallery-status role="status" aria-live="polite"></p>
+</div>
+
+<script>
+  const gallery = document.querySelector<HTMLElement>('[data-project-gallery]');
+  const track = gallery?.querySelector<HTMLElement>('[data-gallery-track]');
+
+  if (gallery && track) {
+    const slides = Array.from(track.querySelectorAll<HTMLElement>('[data-gallery-slide]'));
+    const selectors = Array.from(gallery.querySelectorAll<HTMLButtonElement>('[data-gallery-select]'));
+    const previous = gallery.querySelector<HTMLButtonElement>('[data-gallery-previous]');
+    const next = gallery.querySelector<HTMLButtonElement>('[data-gallery-next]');
+    const status = gallery.querySelector<HTMLElement>('[data-gallery-status]');
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    let settledIndex = 0;
+    let scrollTimer = 0;
+    let frame = 0;
+
+    const currentIndex = () => slides.reduce((best, slide, index) =>
+      Math.abs(slide.offsetLeft - track.scrollLeft) < Math.abs(slides[best].offsetLeft - track.scrollLeft) ? index : best, 0);
+
+    const updateSelector = (index: number) => {
+      selectors.forEach((button, buttonIndex) => {
+        if (buttonIndex === index) button.setAttribute('aria-current', 'true');
+        else button.removeAttribute('aria-current');
+      });
+    };
+
+    const settle = () => {
+      const index = currentIndex();
+      updateSelector(index);
+      if (previous && next) {
+        previous.disabled = index === 0;
+        next.disabled = index === slides.length - 1;
+        if (document.activeElement === previous && previous.disabled) next.focus();
+        if (document.activeElement === next && next.disabled) previous.focus();
+      }
+      if (index !== settledIndex && status) status.textContent = `${document.documentElement.lang === 'es' ? 'Captura' : 'Screenshot'} ${index + 1} ${document.documentElement.lang === 'es' ? 'de' : 'of'} ${slides.length}: ${slides[index].dataset.galleryLabel}`;
+      settledIndex = index;
+    };
+
+    const goTo = (index: number) => {
+      const slide = slides[index];
+      if (!slide) return;
+      updateSelector(index);
+      track.scrollTo({ left: slide.offsetLeft, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+    };
+
+    previous?.addEventListener('click', () => goTo(Math.max(0, currentIndex() - 1)));
+    next?.addEventListener('click', () => goTo(Math.min(slides.length - 1, currentIndex() + 1)));
+    selectors.forEach((button, index) => button.addEventListener('click', () => goTo(index)));
+    track.addEventListener('scroll', () => {
+      if (!frame) frame = requestAnimationFrame(() => {
+        updateSelector(currentIndex());
+        frame = 0;
+      });
+      if (!('onscrollend' in track)) {
+        window.clearTimeout(scrollTimer);
+        scrollTimer = window.setTimeout(settle, 120);
+      }
+    }, { passive: true });
+    if ('onscrollend' in track) track.addEventListener('scrollend', settle);
+    settle();
+  }
+</script>

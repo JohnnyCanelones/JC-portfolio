@@ -14,13 +14,16 @@
     "lint": "biome check --formatter-enabled=false .",
     "format": "biome format --write .",
     "format:check": "biome format .",
-    "validate": "pnpm format:check && pnpm lint && pnpm check && pnpm build"
+    "validate": "pnpm format:check && pnpm lint && pnpm check && pnpm build && pnpm test",
+    "test": "node --test scripts/content-policy.test.mjs && python3 scripts/check-output.py",
+    "test:publishing": "python3 scripts/check-publication.py"
   },
   "dependencies": {
     "@astrojs/mdx": "8.1.6",
     "@astrojs/react": "7.1.9",
-    "@fontsource/geist-mono": "5.3.0",
-    "@fontsource/geist-sans": "5.3.0",
+    "@fontsource/ibm-plex-mono": "5.3.0",
+    "@fontsource/manrope": "5.3.0",
+    "@fontsource/newsreader": "5.3.0",
     "@tailwindcss/vite": "4.3.5",
     "astro": "7.4.13",
     "lucide-react": "1.79.0",

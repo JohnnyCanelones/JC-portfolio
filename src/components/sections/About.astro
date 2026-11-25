@@ -1,0 +1,32 @@
+---
+import { Image } from 'astro:assets';
+import johnnyPortrait from '@assets/johnny-portrait.png';
+import { useTranslations } from '@i18n';
+const en = useTranslations('en'); const es = useTranslations('es');
+---
+
+<section id="about" class="section page-container" aria-labelledby="about-title">
+  <div class="about-layout">
+    <div class="about-side">
+      <p class="section-kicker" data-copy-en={en.about.kicker} data-copy-es={es.about.kicker}>{en.about.kicker}</p>
+      <h2 id="about-title" class="section-title" data-copy-en={en.about.title} data-copy-es={es.about.title}>{en.about.title}</h2>
+      <Image
+        class="about-portrait"
+        src={johnnyPortrait}
+        alt={en.about.portraitAlt}
+        data-alt-en={en.about.portraitAlt}
+        data-alt-es={es.about.portraitAlt}
+        widths={[320, 480, 720]}
+        sizes="(max-width: 48rem) calc(100vw - 2.25rem), 28vw"
+        format="webp"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+    <div class="about-copy">
+      <p class="about-paragraph about-lead" data-copy-en={en.about.lead} data-copy-es={es.about.lead}>{en.about.lead}</p>
+      <p class="about-paragraph" data-copy-en={en.about.body} data-copy-es={es.about.body}>{en.about.body}</p>
+      <p class="about-paragraph" data-copy-en={en.about.leadership} data-copy-es={es.about.leadership}>{en.about.leadership}</p>
+    </div>
+  </div>
+</section>

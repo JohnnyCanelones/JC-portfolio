@@ -1,0 +1,177 @@
+---
+import { site } from '@config/site';
+import { publishedPosts } from '@lib/content';
+import { localePath, sectionPath, type Locale, useTranslations } from '@i18n';
+import ThemeControl from '../interactive/ThemeControl.astro';
+import LanguageSwitcher from '../interactive/LanguageSwitcher.astro';
+interface Props { locale?: Locale }
+const { locale = 'en' } = Astro.props;
+const messages = useTranslations(locale);
+const hasBlog = (await publishedPosts(locale)).length > 0;
+const path = Astro.url.pathname;
+const links = [
+  {href:sectionPath(locale, 'work', path), label:messages.nav.work, title:messages.nav.work, count:'01 / 04'},
+  {href:sectionPath(locale, 'experience', path), label:messages.nav.experience, title:messages.nav.experience, count:'02 / 04'},
+  {href:sectionPath(locale, 'about', path), label:messages.nav.about, title:messages.nav.about, count:'03 / 04'},
+  {href:sectionPath(locale, 'contact', path), label:messages.nav.contact, title:messages.nav.contact, count:'04 / 04'},
+  ...(hasBlog ? [{href:localePath(locale, '/blog/'), label:messages.common.writing, title:messages.common.writing, count:''}] : []),
+];
+---
+
+<header class="site-header">
+  <div class="page-container header-inner">
+    <a class="wordmark" href={sectionPath(locale, 'top', path)} aria-label={messages.nav.wordmark} data-label-en="JC, Johnny Canelones, home" data-label-es="JC, Johnny Canelones, inicio" data-transition-title={site.fullName} data-transition-count="JC / Portfolio">
+      <span>JC</span><span class="wordmark-accent" aria-hidden="true">&lt;/&gt;</span>
+    </a>
+    <nav class="site-nav" aria-label={messages.nav.label} data-label-en="Main navigation" data-label-es="Navegación principal">
+      <ul class="nav-list">
+        {links.map((link, index) => <li><a href={link.href} data-copy-en={['Work','Experience','About','Contact','Writing'][index]} data-copy-es={['Proyectos','Experiencia','Sobre mí','Contacto','Artículos'][index]} data-transition-title={link.title} data-transition-count={link.count} aria-current={!link.href.includes('#') && path.startsWith(link.href) ? 'page' : undefined}>{link.label}</a></li>)}
+      </ul>
+    </nav>
+    <LanguageSwitcher />
+    <ThemeControl locale={locale} />
+  </div>
+</header>
+
+<div class="section-curtain" data-transition-curtain aria-hidden="true" hidden>
+  <span class="section-curtain-trail" data-curtain-trail></span>
+  <span class="section-curtain-panel" data-curtain-panel></span>
+  <span class="section-curtain-meta">JC / Portfolio</span>
+  <strong class="section-curtain-title" data-curtain-title></strong>
+  <span class="section-curtain-count" data-curtain-count></span>
+</div>
+
+<script>
+  const header = document.querySelector<HTMLElement>('.site-header');
+
+  if (header) {
+    const syncHeaderHeight = () => {
+      document.documentElement.style.setProperty('--header-height', `${Math.ceil(header.getBoundingClientRect().height)}px`);
+    };
+
+    syncHeaderHeight();
+    new ResizeObserver(syncHeaderHeight).observe(header);
+  }
+
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const curtain = document.querySelector<HTMLElement>('[data-transition-curtain]');
+  const curtainTitle = curtain?.querySelector<HTMLElement>('[data-curtain-title]');
+  const curtainCount = curtain?.querySelector<HTMLElement>('[data-curtain-count]');
+  const curtainTrail = curtain?.querySelector<HTMLElement>('[data-curtain-trail]');
+  const curtainPanel = curtain?.querySelector<HTMLElement>('[data-curtain-panel]');
+  const sectionLinks = document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]:not(.skip-link)');
+  let transitioning = false;
+  let queuedLink: HTMLAnchorElement | null = null;
+
+  const directions: Record<string, [string, string]> = {
+    work: ['translateX(-102%)', 'translateX(102%)'],
+    experience: ['translateY(102%)', 'translateY(-102%)'],
+    about: ['translateX(102%)', 'translateX(-102%)'],
+    contact: ['translateY(-102%)', 'translateY(102%)'],
+    top: ['translateX(-102%)', 'translateX(102%)'],
+  };
+
+  for (const link of sectionLinks) {
+    link.addEventListener('click', (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (location.pathname !== '/' || reducedMotion.matches || !curtain?.animate) return;
+
+      const destination = link.hash.slice(1);
+      const target = document.getElementById(destination);
+      if (!target) return;
+
+      event.preventDefault();
+      if (transitioning) {
+        queuedLink = link;
+        return;
+      }
+
+      transitioning = true;
+      const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = 'auto';
+
+      const switchSection = () => {
+        target.scrollIntoView({ block: 'start' });
+        if (location.hash !== link.hash) history.pushState(null, '', link.hash);
+      };
+
+      const animateCurtain = async () => {
+        if (!curtain || !curtainTitle || !curtainCount || !curtainTrail || !curtainPanel) {
+          switchSection();
+          return;
+        }
+
+        const [entry, exit] = directions[destination] ?? directions.work;
+        curtainTitle.textContent = destination === 'top' ? 'Johnny Canelones' : link.textContent?.trim() ?? '';
+        curtainCount.textContent = link.dataset.transitionCount ?? '';
+        curtain.hidden = false;
+
+        const trailCover = curtainTrail.animate(
+          [{ transform: entry }, { transform: 'translate(0, 0)' }],
+          { duration: 400, easing: 'cubic-bezier(0.7, 0, 0.2, 1)', fill: 'forwards' },
+        );
+        const panelCover = curtainPanel.animate(
+          [{ transform: entry }, { transform: 'translate(0, 0)' }],
+          { duration: 400, delay: 85, easing: 'cubic-bezier(0.7, 0, 0.2, 1)', fill: 'both' },
+        );
+        const titleIn = curtainTitle.animate(
+          [{ transform: 'translateY(1.5rem)', opacity: 0 }, { transform: 'translateY(0)', opacity: 1 }],
+          { duration: 280, delay: 250, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'both' },
+        );
+        const details = [curtain.querySelector<HTMLElement>('.section-curtain-meta'), curtainCount]
+          .filter((element): element is HTMLElement => element !== null)
+          .map((element) => element.animate(
+            [{ opacity: 0 }, { opacity: 1 }],
+            { duration: 220, delay: 310, fill: 'both' },
+          ));
+
+        try {
+          await panelCover.finished;
+          switchSection();
+          const titleOut = curtainTitle.animate(
+            [{ transform: 'translateY(0)', opacity: 1 }, { transform: 'translateY(-1.5rem)', opacity: 0 }],
+            { duration: 260, easing: 'cubic-bezier(0.7, 0, 0.2, 1)', fill: 'forwards' },
+          );
+          const panelReveal = curtainPanel.animate(
+            [{ transform: 'translate(0, 0)' }, { transform: exit }],
+            { duration: 440, delay: 130, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' },
+          );
+          const trailReveal = curtainTrail.animate(
+            [{ transform: 'translate(0, 0)' }, { transform: exit }],
+            { duration: 440, delay: 220, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' },
+          );
+          await trailReveal.finished;
+          titleOut.cancel();
+          panelReveal.cancel();
+          trailReveal.cancel();
+        } finally {
+          trailCover.cancel();
+          panelCover.cancel();
+          titleIn.cancel();
+          details.forEach((animation) => animation.cancel());
+          curtain.hidden = true;
+        }
+      };
+
+      const complete = () => {
+        document.documentElement.style.scrollBehavior = previousScrollBehavior;
+        transitioning = false;
+
+        const heading = target.querySelector<HTMLElement>('h1, h2');
+        if (heading) {
+          heading.tabIndex = -1;
+          heading.focus({ preventScroll: true });
+          heading.addEventListener('blur', () => heading.removeAttribute('tabindex'), { once: true });
+        }
+
+        if (queuedLink) {
+          const nextLink = queuedLink;
+          queuedLink = null;
+          nextLink.click();
+        }
+      };
+
+      animateCurtain().then(complete, complete);
+    });
+  }
+</script>

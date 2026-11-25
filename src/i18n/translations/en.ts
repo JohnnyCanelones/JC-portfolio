@@ -1,0 +1,129 @@
+export const en = {
+  meta: {
+    defaultTitle: 'Johnny Canelones | Full-Stack Software Engineer',
+    defaultDescription:
+      'I build web applications and backend systems, with experience across aviation, finance, and geospatial data.',
+    titleTemplate: '%s | Johnny Canelones',
+  },
+  common: {
+    skipToContent: 'Skip to content',
+    home: 'Home',
+    projects: 'Projects',
+    writing: 'Writing',
+    read: 'Read',
+    minRead: 'min read',
+    updated: 'Updated',
+    onThisPage: 'On this page',
+    relatedWork: 'Related work',
+    contribution: 'Contribution',
+    context: 'Context',
+    technology: 'Technology',
+    personalProject: 'Personal project',
+    independentDevelopment: 'Independent development',
+    sourceCode: 'Source code',
+    suppliedScreenshot: 'Supplied product screenshot.',
+    pageNotFound: 'Page not found',
+    backHome: 'Back to home',
+  },
+  nav: {
+    label: 'Main navigation',
+    work: 'Work',
+    experience: 'Experience',
+    about: 'About',
+    contact: 'Contact',
+    wordmark: 'JC, Johnny Canelones, home',
+  },
+  language: {
+    label: 'Language',
+    unavailable: 'This page is not available in Spanish. The link goes to the Spanish homepage.',
+  },
+  theme: { label: 'Theme', control: 'Color theme', system: 'System', light: 'Light', dark: 'Dark' },
+  hero: {
+    role: 'Full-Stack Software Engineer',
+    based: 'Based in Ecuador',
+    intro:
+      'I build web applications and backend systems, with experience across aviation, finance, and geospatial data.',
+    availability: 'Available for remote software engineering opportunities.',
+    selectedWork: 'Selected work',
+    resume: 'Résumé',
+  },
+  work: {
+    kicker: 'Selected work',
+    title: 'Products shaped by real constraints.',
+    intro:
+      'Personal work and selected contributions across finance, environmental data, aviation, media, and document software.',
+    directoryKicker: 'Project directory',
+    directoryTitle: 'Software, in context.',
+    directoryIntro:
+      'Personal products and professional contributions. Each case study describes my scope, the system around it, and the engineering decisions behind the work.',
+    personal: 'Personal project',
+    professional: 'Professional contributions',
+    additional: 'Additional selected work',
+    visitProject: 'Visit project',
+    visit: 'Visit',
+    signInCaption: 'WealthOS / sign-in screen',
+  },
+  experience: {
+    kicker: 'Experience',
+    title: 'Engineering across domains.',
+    intro:
+      'Work spanning web platforms, mobile experiences, environmental data, and financial systems.',
+    pageKicker: 'Professional experience',
+    pageDeck:
+      'Frontend and backend delivery, from financial workflows to mobile reading and playback experiences.',
+    downloadResume: 'Download résumé',
+    caseStudy: 'Read %s case study',
+    present: 'Present',
+  },
+  expertise: { kicker: 'Practice', title: 'Across the stack, close to the product.' },
+  about: {
+    kicker: 'About',
+    title: 'A little about my approach.',
+    lead: 'I build software that has to work beyond the demo: for people booking flights, navigating environmental data, managing finances, or finding answers in documents.',
+    body: 'My work moves between frontend and backend engineering. I care about clear architecture, usable interfaces, and the practical details that keep a product dependable.',
+    leadership:
+      "I've led a small development team and collaborated with distributed teams across different industries. I enjoy turning complicated workflows into tools that feel straightforward to use.",
+    pageTitle: 'About',
+    pageDescription:
+      'How Johnny Canelones approaches frontend and backend engineering, technical leadership, and product development.',
+    pageKicker: 'About me',
+    pageHeading: 'Across the stack. Close to the product.',
+    portraitAlt: 'Johnny Canelones wearing glasses, seated indoors.',
+    location: 'Ecuador · Remote opportunities',
+    backgroundTitle: 'My background',
+    background:
+      "I'm Johnny Canelones, a full-stack software engineer based in Ecuador. I've worked on accounting systems, airline booking experiences, environmental data platforms, and interfaces for reading and interacting with documents.",
+    approachTitle: 'How I approach engineering',
+    approach:
+      'My work connects frontend behavior with backend responsibilities: the information an interface needs, how an API exposes it, and what happens when a request fails or connectivity changes. I care about making those boundaries clear enough to maintain as a product evolves.',
+    teamTitle: 'Working with a team',
+    team: 'At GlobalFinances, I led a three-developer team while contributing to accounting and electronic invoicing software. My other roles have involved collaboration across frontend, backend, and product work.',
+    focusTitle: 'Current focus',
+    focus:
+      'WealthOS is my personal space for exploring financial workflows, offline synchronization, and controlled automation. I am interested in applying automation where its output can be validated and the user can review meaningful decisions.',
+    closing: 'Available for remote software engineering opportunities.',
+    getInTouch: 'Get in touch',
+    readExperience: 'read my experience',
+  },
+  contact: {
+    kicker: 'Contact',
+    title: "Let's talk.",
+    copy: "I'm based in Ecuador and open to remote software engineering opportunities. If my experience fits what you're building, I'd like to hear about it.",
+    email: 'Email me',
+    pageDescription: 'Contact Johnny Canelones about remote software engineering opportunities.',
+    pageDeck:
+      "Available for remote software engineering opportunities. I'm based in Ecuador and work across frontend and backend engineering.",
+    resumeEnglish: 'Download résumé',
+  },
+  footer: { remote: 'Ecuador · Remote' },
+  blog: {
+    title: 'Writing',
+    description:
+      'Technical notes on application architecture, frontend engineering, and software delivery.',
+    kicker: 'Technical writing',
+    heading: 'Notes from the work.',
+    draft: 'Unpublished local preview',
+    more: 'More writing',
+  },
+  notFound: { description: 'The requested page could not be found.' },
+} as const;

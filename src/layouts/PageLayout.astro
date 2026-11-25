@@ -1,0 +1,13 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '@components/layout/Header.astro';
+import Footer from '@components/layout/Footer.astro';
+import '@styles/prose.css';
+interface Props { title: string; description: string; localizedTitle?: string; localizedDescription?: string; image?: string; noindex?: boolean; structuredData?: Record<string, unknown>; }
+const { title, description, localizedTitle, localizedDescription, image, structuredData, noindex } = Astro.props;
+---
+<BaseLayout title={title} description={description} localizedTitle={localizedTitle} localizedDescription={localizedDescription} canonicalPath={Astro.url.pathname} image={image} noindex={noindex} structuredData={structuredData}>
+  <Header />
+  <main id="main-content" class="with-fixed-header" tabindex="-1"><slot /></main>
+  <Footer />
+</BaseLayout>

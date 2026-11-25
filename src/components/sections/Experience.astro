@@ -1,0 +1,30 @@
+---
+import { getExperience } from '@data/experience';
+import { useTranslations } from '@i18n';
+const experience = getExperience('en'); const spanish = getExperience('es');
+const en = useTranslations('en'); const es = useTranslations('es');
+---
+
+<section id="experience" class="section page-container" aria-labelledby="experience-title">
+  <div class="section-head">
+    <p class="section-kicker" data-copy-en={en.experience.kicker} data-copy-es={es.experience.kicker}>{en.experience.kicker}</p>
+    <div>
+      <h2 id="experience-title" class="section-title" data-copy-en={en.experience.title} data-copy-es={es.experience.title}>{en.experience.title}</h2>
+      <p class="section-intro" data-copy-en={en.experience.intro} data-copy-es={es.experience.intro}>{en.experience.intro}</p>
+    </div>
+  </div>
+  <div class="experience-list">
+    {experience.map((entry, index) => (
+      <article class="experience-item">
+        <p class="experience-period" data-copy-en={entry.period} data-copy-es={spanish[index].period}>{entry.period}</p>
+        <div>
+          <h3>{entry.company}</h3>
+          <p class="experience-role" data-copy-en={entry.role} data-copy-es={spanish[index].role}>{entry.role}</p>
+          <p class="experience-description" data-copy-en={entry.summary} data-copy-es={spanish[index].summary}>{entry.summary}</p>
+          {entry.detail && <p class="experience-description" data-copy-en={entry.detail} data-copy-es={spanish[index].detail ?? ''}>{entry.detail}</p>}
+          <p class="experience-tech">{entry.technologies}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>

@@ -1,0 +1,58 @@
+---
+import { type Locale, useTranslations } from '@i18n';
+interface Props { locale?: Locale }
+const { locale = 'en' } = Astro.props;
+const messages = useTranslations(locale);
+---
+<label class="theme-control" for="theme-preference">
+  <span data-copy-en="Theme" data-copy-es="Tema">{messages.theme.label}</span>
+  <select id="theme-preference" name="theme" aria-label={messages.theme.control} data-label-en="Color theme" data-label-es="Tema de color">
+    <option value="system" data-copy-en="System" data-copy-es="Sistema">{messages.theme.system}</option>
+    <option value="light" data-copy-en="Light" data-copy-es="Claro">{messages.theme.light}</option>
+    <option value="dark" data-copy-en="Dark" data-copy-es="Oscuro">{messages.theme.dark}</option>
+  </select>
+</label>
+
+<script>
+  const select = document.querySelector<HTMLSelectElement>('#theme-preference');
+  const root = document.documentElement;
+  const meta = document.querySelector<HTMLMetaElement>('meta[name="color-scheme"]');
+  const key = 'portfolio-theme';
+
+  function readPreference(): 'light' | 'dark' | 'system' {
+    try {
+      const value = localStorage.getItem(key);
+      return value === 'light' || value === 'dark' ? value : 'system';
+    } catch {
+      return root.dataset.theme === 'light' || root.dataset.theme === 'dark'
+        ? root.dataset.theme
+        : 'system';
+    }
+  }
+
+  function applyPreference(value: 'light' | 'dark' | 'system') {
+    if (value === 'system') {
+      delete root.dataset.theme;
+    } else {
+      root.dataset.theme = value;
+    }
+    if (meta) meta.content = value === 'system' ? 'light dark' : value;
+    if (select) select.value = value;
+  }
+
+  applyPreference(readPreference());
+  select?.addEventListener('change', () => {
+    const value = select.value;
+    if (value !== 'light' && value !== 'dark' && value !== 'system') return;
+    applyPreference(value);
+    try {
+      if (value === 'system') localStorage.removeItem(key);
+      else localStorage.setItem(key, value);
+    } catch {
+      // The selected theme still works for this page when storage is unavailable.
+    }
+  });
+  window.addEventListener('storage', (event) => {
+    if (event.key === key) applyPreference(readPreference());
+  });
+</script>

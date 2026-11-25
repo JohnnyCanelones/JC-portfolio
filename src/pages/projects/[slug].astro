@@ -1,0 +1,33 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import EditorialLayout from '@layouts/EditorialLayout.astro';
+import { publishedProjects, readingTime, relatedProjects, translationOf } from '@lib/content';
+import { getExperience } from '@data/experience';
+export async function getStaticPaths() {
+ const english = await publishedProjects('en'); const spanish = await publishedProjects('es');
+ return english.map(project => ({params:{slug:project.data.slug}, props:{project, translation:translationOf(project, spanish, 'es')}}));
+}
+interface Props { project: CollectionEntry<'projects'>; translation?: CollectionEntry<'projects'>; }
+const {project, translation} = Astro.props;
+const {Content, headings} = await render(project);
+const translatedRender = translation ? await render(translation) : undefined;
+const TranslatedContent = translatedRender?.Content;
+const data = project.data;
+const translated = translation?.data;
+const employment = getExperience('en').find(entry => entry.id === data.experienceId);
+const spanishEmployment = getExperience('es').find(entry => entry.id === data.experienceId);
+const related = relatedProjects(project, await publishedProjects('en'));
+const spanishProjects = await publishedProjects('es');
+---
+<EditorialLayout title={data.seo?.title ?? data.title} description={data.seo?.description ?? data.description} category={data.category} localizedTitle={translated?.seo?.title ?? translated?.title} localizedDescription={translated?.seo?.description ?? translated?.description} localizedCategory={translated?.category} localizedHeadings={translatedRender?.headings} parent="/projects/" parentLabel="Projects" headings={headings} minutes={readingTime(project.body)} image={data.seo?.image}>
+ <div slot="metadata">
+  <dl class="project-metadata"><div><dt data-copy-en="Contribution" data-copy-es="Contribución">Contribution</dt><dd data-copy-en={data.role ?? 'Personal project'} data-copy-es={translated?.role ?? 'Proyecto personal'}>{data.role ?? 'Personal project'}</dd></div><div><dt data-copy-en="Context" data-copy-es="Contexto">Context</dt><dd data-copy-en={data.company ?? 'Independent development'} data-copy-es={translated?.company ?? 'Desarrollo independiente'}>{data.company ?? 'Independent development'}</dd>{employment && <dd data-copy-en={employment.period} data-copy-es={spanishEmployment?.period}>{employment.period}</dd>}</div><div><dt data-copy-en="Technology" data-copy-es="Tecnología">Technology</dt><dd>{data.technologies.join(' · ')}</dd></div></dl>
+  <div class="text-actions">{data.demoUrl && <a class="text-link" href={data.demoUrl}><span data-copy-en={`Visit ${data.title}`} data-copy-es={`Visitar ${data.title}`}>Visit {data.title}</span> ↗</a>}{data.repositoryUrl && <a class="text-link" href={data.repositoryUrl}><span data-copy-en="Source code" data-copy-es="Código fuente">Source code</span> ↗</a>}{data.links?.map(link=><a class="text-link" href={link.url}>{link.label} ↗</a>)}</div>
+ </div>
+ <Content />
+ {TranslatedContent && <TranslatedContent slot="localized" />}
+ {data.coverImage && <figure><Image src={data.coverImage} alt={data.coverAlt!} data-alt-en={data.coverAlt!} data-alt-es={translated?.coverAlt ?? data.coverAlt!} widths={[480,768,1200]} sizes="(max-width: 48rem) 90vw, 65vw" format="webp" loading="lazy" /><figcaption data-copy-en={data.coverAlt} data-copy-es={translated?.coverAlt}>{data.coverAlt}</figcaption></figure>}
+ {data.gallery?.map(slide=><figure><Image src={slide.image} alt={slide.alt} widths={[480,768,1200]} sizes="(max-width: 48rem) 90vw, 65vw" format="webp" loading="lazy" /><figcaption><a href={slide.url}>{slide.label}</a> — supplied product screenshot.</figcaption></figure>)}
+ <section slot="related" class="related-content" aria-labelledby="related-title"><h2 id="related-title" data-copy-en="Related work" data-copy-es="Trabajo relacionado">Related work</h2><ul>{related.map(item=>{const itemEs=translationOf(item, spanishProjects,'es');return <li><a href={`/projects/${item.data.slug}/`}>{item.data.title}</a><p data-copy-en={item.data.description} data-copy-es={itemEs?.data.description}>{item.data.description}</p></li>})}</ul></section>
+</EditorialLayout>

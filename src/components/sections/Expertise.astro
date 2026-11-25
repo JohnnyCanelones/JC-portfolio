@@ -1,0 +1,24 @@
+---
+import { getExpertise } from '@data/expertise';
+import { useTranslations } from '@i18n';
+const expertise = getExpertise('en'); const spanish = getExpertise('es');
+const en = useTranslations('en'); const es = useTranslations('es');
+---
+
+<section class="section page-container" aria-labelledby="expertise-title">
+  <div class="section-head">
+    <p class="section-kicker" data-copy-en={en.expertise.kicker} data-copy-es={es.expertise.kicker}>{en.expertise.kicker}</p>
+    <div>
+      <h2 id="expertise-title" class="section-title" data-copy-en={en.expertise.title} data-copy-es={es.expertise.title}>{en.expertise.title}</h2>
+    </div>
+  </div>
+  <div class="expertise-grid">
+    {expertise.map((item, index) => (
+      <div class="expertise-item">
+        <h3 data-copy-en={item.title} data-copy-es={spanish[index].title}>{item.title}</h3>
+        <p class="expertise-description" data-copy-en={item.description} data-copy-es={spanish[index].description}>{item.description}</p>
+        <p class="expertise-tech" data-copy-en={item.technologies} data-copy-es={spanish[index].technologies}>{item.technologies}</p>
+      </div>
+    ))}
+  </div>
+</section>

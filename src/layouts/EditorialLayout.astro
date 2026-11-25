@@ -1,0 +1,33 @@
+---
+import type { MarkdownHeading } from 'astro';
+import PageLayout from './PageLayout.astro';
+import { site } from '@config/site';
+interface Props {
+ title: string; description: string; category: string; parent: string; parentLabel: string;
+ headings: MarkdownHeading[]; minutes: number; noindex?: boolean; image?: string; publishedAt?: Date; updatedAt?: Date; kind?: 'CreativeWork' | 'BlogPosting';
+ localizedTitle?: string; localizedDescription?: string; localizedCategory?: string; localizedHeadings?: MarkdownHeading[];
+}
+const {title, description, category, parent, parentLabel, headings, minutes, image, publishedAt, updatedAt, kind='CreativeWork', noindex, localizedTitle=title, localizedDescription=description, localizedCategory=category, localizedHeadings=[]} = Astro.props;
+const toc = headings.filter(h => h.depth === 2 || h.depth === 3);
+const url = new URL(Astro.url.pathname, site.url).href;
+const structuredData = {'@context':'https://schema.org', '@graph':[
+ {'@type':kind, name:title, headline:title, description, url, inLanguage:['en','es'], author:{'@type':'Person','@id':`${site.url}/#person`, name:site.fullName}, ...(publishedAt ? {datePublished:publishedAt.toISOString()} : {}), ...(updatedAt ? {dateModified:updatedAt.toISOString()} : {})},
+ {'@type':'BreadcrumbList', itemListElement:[{'@type':'ListItem',position:1,name:'Home',item:site.url},{'@type':'ListItem',position:2,name:parentLabel,item:new URL(parent,site.url).href},{'@type':'ListItem',position:3,name:title,item:url}]}
+]};
+---
+<PageLayout title={title} description={description} localizedTitle={localizedTitle} localizedDescription={localizedDescription} image={image} noindex={noindex} structuredData={structuredData}>
+ <div class="page-container editorial-page">
+  <nav class="breadcrumbs" aria-label="Breadcrumb" data-label-en="Breadcrumb" data-label-es="Migas de pan"><a href="/" data-copy-en="Home" data-copy-es="Inicio">Home</a><span aria-hidden="true">/</span>{parent !== "/" && <><a href={parent} data-copy-en={parentLabel} data-copy-es={parentLabel === 'Projects' ? 'Proyectos' : 'Artículos'}>{parentLabel}</a><span aria-hidden="true">/</span></>}<span aria-current="page" data-copy-en={title} data-copy-es={localizedTitle}>{title}</span></nav>
+  <header class="article-header">
+   <p class="section-kicker"><span data-copy-en={category} data-copy-es={localizedCategory}>{category}</span> <span aria-hidden="true">/</span> {minutes} <span data-copy-en="min read" data-copy-es="min de lectura">min read</span></p>
+   <h1 data-copy-en={title} data-copy-es={localizedTitle}>{title}</h1><p class="article-deck" data-copy-en={description} data-copy-es={localizedDescription}>{description}</p>
+   {publishedAt && <p class="article-date"><time datetime={publishedAt.toISOString()}>{publishedAt.toLocaleDateString('en', {year:'numeric', month:'long', day:'numeric',timeZone:'UTC'})}</time>{updatedAt && <> · Updated <time datetime={updatedAt.toISOString()}>{updatedAt.toLocaleDateString('en',{year:'numeric', month:'long',day:'numeric',timeZone:'UTC'})}</time></>}</p>}
+   <slot name="metadata" />
+  </header>
+  <div class="article-grid">
+   {toc.length > 0 && <><nav class="article-toc" aria-label="On this page" data-locale-content="en"><p>On this page</p><ol>{toc.map(h=><li class:list={{'toc-nested':h.depth===3}}><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol></nav><nav class="article-toc" aria-label="En esta página" data-locale-content="es" hidden><p>En esta página</p><ol>{localizedHeadings.filter(h=>h.depth===2||h.depth===3).map(h=><li class:list={{'toc-nested':h.depth===3}}><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol></nav></>}
+   <article class="prose"><div data-locale-content="en"><slot /></div><div data-locale-content="es" hidden><slot name="localized" /></div></article>
+  </div>
+  <slot name="related" />
+ </div>
+</PageLayout>

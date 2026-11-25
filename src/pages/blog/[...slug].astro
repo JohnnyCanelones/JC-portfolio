@@ -1,0 +1,20 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import EditorialLayout from '@layouts/EditorialLayout.astro';
+import PageLayout from '@layouts/PageLayout.astro';
+import { publishedPosts, readingTime } from '@lib/content';
+export async function getStaticPaths() {
+ const posts = await publishedPosts();
+ const paths: {params:{slug:string|undefined};props:{post?:CollectionEntry<'blog'>}}[] = posts.map(post=>({params:{slug:post.data.slug},props:{post}}));
+ if (posts.length) paths.push({params:{slug:undefined},props:{}});
+ if (import.meta.env.DEV) for (const post of await getCollection('blog', ({data})=>data.draft)) paths.push({params:{slug:`_draft/${post.data.slug}`},props:{post}});
+ return paths;
+}
+interface Props { post?: CollectionEntry<'blog'>; }
+const {post} = Astro.props;
+const rendered = post ? await render(post) : undefined;
+const Content = rendered?.Content;
+const posts = await publishedPosts();
+---
+{post && Content && rendered ? <EditorialLayout noindex={post.data.draft || undefined} image={post.data.seo?.image ?? post.data.coverImage?.src} title={post.data.seo?.title ?? post.data.title} description={post.data.seo?.description ?? post.data.description} category={post.data.draft ? 'Unpublished local preview' : 'Writing'} parent={post.data.draft ? '/' : '/blog/'} parentLabel={post.data.draft ? 'Home' : 'Writing'} headings={rendered.headings} minutes={readingTime(post.body)} publishedAt={post.data.draft ? undefined : post.data.publishedAt} updatedAt={post.data.updatedAt} kind="BlogPosting"><Content />{post.data.coverImage && <figure><Image src={post.data.coverImage} alt={post.data.coverAlt!} widths={[480, 800, 1200]} sizes="(max-width: 760px) 90vw, 68ch" loading="lazy" /><figcaption>{post.data.coverAlt}</figcaption></figure>}{posts.some(p=>p.id!==post.id) && <section slot="related" class="related-content"><h2>More writing</h2><ul>{posts.filter(p=>p.id!==post.id).slice(0,2).map(p=><li><a href={`/blog/${p.data.slug}/`}>{p.data.title}</a></li>)}</ul></section>}</EditorialLayout> : <PageLayout title="Writing" description="Technical notes on application architecture, frontend engineering, and software delivery."><div class="page-container editorial-page"><header class="article-header"><p class="section-kicker">Technical writing</p><h1>Notes from the work.</h1></header><div class="related-content">{posts.map(p=><article><h2><a href={`/blog/${p.data.slug}/`}>{p.data.title}</a></h2><p>{p.data.description}</p><p class="project-meta"><time datetime={p.data.publishedAt.toISOString()}>{p.data.publishedAt.toLocaleDateString('en',{timeZone:'UTC'})}</time> · {readingTime(p.body)} min read · {p.data.tags.join(' / ')}</p></article>)}</div></div></PageLayout>}

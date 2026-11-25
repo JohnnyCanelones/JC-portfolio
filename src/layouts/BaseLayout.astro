@@ -1,33 +1,49 @@
 ---
 import { site } from '@config/site';
-import { type Locale, t } from '../i18n';
+import { type Locale, useTranslations } from '../i18n';
 import '@styles/global.css';
+import newsreaderRegular from '@fontsource/newsreader/files/newsreader-latin-400-normal.woff2?url';
 
 export interface Props {
   title?: string;
   description?: string;
+  localizedTitle?: string;
+  localizedDescription?: string;
   canonicalPath?: string;
   image?: string;
   lang?: Locale;
   noindex?: boolean;
+  structuredData?: Record<string, unknown>;
 }
 
 const {
   title,
-  description = site.seo.defaultDescription,
+  description,
+  localizedTitle,
+  localizedDescription,
   canonicalPath = Astro.url.pathname,
   image = site.seo.socialImage,
   lang = site.defaultLanguage,
-  noindex = false,
+  noindex = site.url === 'https://example.com',
+  structuredData,
 } = Astro.props;
+const messages = useTranslations(lang);
+const spanishMessages = useTranslations('es');
+const resolvedDescription = description ?? messages.meta.defaultDescription;
 
-const pageTitle = title ? site.seo.titleTemplate.replace('%s', title) : site.seo.defaultTitle;
+const pageTitle = title ? messages.meta.titleTemplate.replace('%s', title) : messages.meta.defaultTitle;
+const spanishPageTitle = localizedTitle
+  ? spanishMessages.meta.titleTemplate.replace('%s', localizedTitle)
+  : title
+    ? pageTitle
+    : spanishMessages.meta.defaultTitle;
+const spanishDescription = localizedDescription ?? (description ? resolvedDescription : spanishMessages.meta.defaultDescription);
 const canonical = new URL(canonicalPath, site.url).href;
 const socialImage = new URL(image, site.url).href;
 ---
 
 <!doctype html>
-<html lang={lang} data-theme="dark">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -35,45 +51,43 @@ const socialImage = new URL(image, site.url).href;
     <script is:inline>
       (() => {
         const root = document.documentElement;
-        let preference = 'dark';
+        root.classList.add('js');
         try {
+          const storedLocale = localStorage.getItem('portfolio-locale');
+          if (storedLocale === 'es') {
+            root.lang = 'es';
+            root.dataset.locale = 'es';
+          }
           const stored = localStorage.getItem('portfolio-theme');
-          if (stored === 'light' || stored === 'dark' || stored === 'system') preference = stored;
+          if (stored === 'light' || stored === 'dark') {
+            root.dataset.theme = stored;
+            document.querySelector('meta[name="color-scheme"]').content = stored;
+          }
         } catch {
-          // Storage can be unavailable; keep the dark default.
+          // The system preference remains usable without storage.
         }
-        const media = window.matchMedia('(prefers-color-scheme: dark)');
-        const apply = () => {
-          root.dataset.theme = preference === 'system' ? (media.matches ? 'dark' : 'light') : preference;
-        };
-        apply();
-        media.addEventListener('change', apply);
-        window.addEventListener('storage', (event) => {
-          if (event.key !== 'portfolio-theme') return;
-          preference = event.newValue === 'light' || event.newValue === 'dark' || event.newValue === 'system'
-            ? event.newValue
-            : 'dark';
-          apply();
-        });
       })();
     </script>
+    <link rel="preload" href={newsreaderRegular} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonical} />
-    <meta name="description" content={description} />
+    <meta name="description" content={resolvedDescription} />
     {noindex && <meta name="robots" content="noindex, follow" />}
     <meta property="og:type" content="website" />
     <meta property="og:title" content={pageTitle} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={resolvedDescription} />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={socialImage} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:description" content={resolvedDescription} />
     <meta name="twitter:image" content={socialImage} />
     <title>{pageTitle}</title>
+    {structuredData && <script type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />}
   </head>
-  <body>
-    <a class="skip-link" href="#main-content">{t(lang, 'skipToContent')}</a>
-    <main id="main-content"><slot /></main>
+  <body id="top" data-title-en={pageTitle} data-title-es={spanishPageTitle} data-description-en={resolvedDescription} data-description-es={spanishDescription}>
+    <a class="skip-link" href="#main-content" data-copy-en="Skip to content" data-copy-es="Saltar al contenido">{messages.common.skipToContent}</a>
+    <slot />
   </body>
 </html>

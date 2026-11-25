@@ -9,6 +9,8 @@
       "@styles/*": ["./src/styles/*"],
       "@assets/*": ["./src/assets/*"],
       "@data/*": ["./src/data/*"],
+      "@i18n": ["./src/i18n/index.ts"],
+      "@i18n/*": ["./src/i18n/*"],
       "@types/*": ["./src/types/*"]
     }
   }

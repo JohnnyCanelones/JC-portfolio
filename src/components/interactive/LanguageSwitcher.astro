@@ -1,0 +1,47 @@
+<div class="language-switcher" role="group" aria-label="Language / Idioma">
+  <button class="active" type="button" data-locale-choice="en" lang="en" aria-pressed="true">EN</button>
+  <span aria-hidden="true">/</span>
+  <button type="button" data-locale-choice="es" lang="es" aria-pressed="false">ES</button>
+</div>
+
+<script>
+  const localeKey = 'portfolio-locale';
+  const localeButtons = document.querySelectorAll<HTMLButtonElement>('[data-locale-choice]');
+
+  function applyLocale(locale: 'en' | 'es', persist = false) {
+    document.documentElement.lang = locale;
+    document.documentElement.dataset.locale = locale;
+    for (const button of localeButtons) {
+      const isActive = button.dataset.localeChoice === locale;
+      button.setAttribute('aria-pressed', String(isActive));
+      button.classList.toggle('active', isActive);
+    }
+    document.querySelectorAll<HTMLElement>('[data-copy-en][data-copy-es]').forEach((element) => {
+      element.textContent = locale === 'es' ? element.dataset.copyEs ?? '' : element.dataset.copyEn ?? '';
+    });
+    document.querySelectorAll<HTMLElement>('[data-label-en][data-label-es]').forEach((element) => {
+      element.setAttribute('aria-label', locale === 'es' ? element.dataset.labelEs ?? '' : element.dataset.labelEn ?? '');
+    });
+    document.querySelectorAll<HTMLImageElement>('[data-alt-en][data-alt-es]').forEach((image) => {
+      image.alt = locale === 'es' ? image.dataset.altEs ?? '' : image.dataset.altEn ?? '';
+    });
+    document.querySelectorAll<HTMLElement>('[data-locale-content]').forEach((element) => {
+      element.hidden = element.dataset.localeContent !== locale;
+    });
+    const body = document.body;
+    document.title = locale === 'es' ? body.dataset.titleEs ?? document.title : body.dataset.titleEn ?? document.title;
+    const description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+    if (description) description.content = locale === 'es' ? body.dataset.descriptionEs ?? description.content : body.dataset.descriptionEn ?? description.content;
+    document.dispatchEvent(new CustomEvent('portfolio:locale-change', { detail: { locale } }));
+    if (persist) {
+      try { localStorage.setItem(localeKey, locale); } catch { /* The selected language still works for this page. */ }
+    }
+  }
+
+  let initial: 'en' | 'es' = 'en';
+  try { if (localStorage.getItem(localeKey) === 'es') initial = 'es'; } catch { /* English remains the fallback. */ }
+  applyLocale(initial);
+  for (const button of localeButtons) {
+    button.addEventListener('click', () => applyLocale(button.dataset.localeChoice === 'es' ? 'es' : 'en', true));
+  }
+</script>

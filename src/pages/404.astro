@@ -1,14 +1,15 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
-import { localePath, t } from '../i18n';
+import { localePath, useTranslations } from '../i18n';
+const en = useTranslations('en'); const es = useTranslations('es');
 ---
 
-<BaseLayout title={t('en', 'pageNotFound')} noindex>
-  <div class="preview-shell">
+<BaseLayout title={en.common.pageNotFound} noindex>
+  <main id="main-content" class="page-container not-found">
     <p class="font-mono text-sm text-accent">404</p>
-    <h1 class="mt-4 text-4xl font-semibold tracking-tight">{t('en', 'pageNotFound')}</h1>
+    <h1 class="mt-4 text-4xl font-semibold tracking-tight" data-copy-en={en.common.pageNotFound} data-copy-es={es.common.pageNotFound}>{en.common.pageNotFound}</h1>
     <a class="mt-8 inline-block text-accent underline underline-offset-4" href={localePath('en')}>
-      {t('en', 'backHome')}
+      <span data-copy-en={en.common.backHome} data-copy-es={es.common.backHome}>{en.common.backHome}</span>
     </a>
-  </div>
+  </main>
 </BaseLayout>
