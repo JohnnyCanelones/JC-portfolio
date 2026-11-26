@@ -34,7 +34,7 @@ class Document(HTMLParser):
 DOCS = {p: Document(p) for p in ROOT.rglob('*.html')}
 class PublicOutput(unittest.TestCase):
     def test_required_routes(self):
-        for route in ['', 'projects', 'projects/wealthos', 'projects/gjd', 'projects/ttb-ism', 'projects/globalfinances', 'projects/breeze-airways', 'projects/brikmate', 'experience', 'about', 'contact']:
+        for route in ['', 'projects', 'projects/wealthos', 'projects/gjd', 'projects/ttb-ism', 'projects/globalfinances', 'projects/breeze-airways', 'projects/brikmate', 'experience', 'about', 'contact', 'certifications']:
             self.assertIn(ROOT / route / 'index.html', DOCS)
     def test_homepage_section_navigation(self):
         home = DOCS[ROOT/'index.html']
@@ -55,6 +55,9 @@ class PublicOutput(unittest.TestCase):
         for marker in ['data-locale-content="es"', 'El producto', 'Escritura sin conexión', 'Trabajo relacionado']:
             self.assertIn(marker, wealthos)
         self.assertNotIn('hreflang="es"', home)
+        certifications = (ROOT / 'certifications/index.html').read_text()
+        for marker in ['Education &amp; Certifications', 'Formación y certificaciones', 'data-certification-list', 'data-copy-es="Verificar credencial"']:
+            self.assertIn(marker, certifications)
     def test_metadata_and_landmarks(self):
         self.assertEqual(len({d.title for d in DOCS.values()}), len(DOCS))
         for doc in DOCS.values():
@@ -94,6 +97,7 @@ class PublicOutput(unittest.TestCase):
         self.assertEqual(len(urls), len(set(urls)))
         self.assertFalse(any('/blog' in u or '_draft' in u for u in urls))
         self.assertTrue(any('/projects/wealthos/' in u for u in urls))
+        self.assertTrue(any('/certifications/' in u for u in urls))
     def test_javascript_budget(self):
         for doc in DOCS.values():
             sources = set(doc.scripts)

@@ -24,7 +24,7 @@ const {
   canonicalPath = Astro.url.pathname,
   image = site.seo.socialImage,
   lang = site.defaultLanguage,
-  noindex = site.url === 'https://example.com',
+  noindex = false,
   structuredData,
 } = Astro.props;
 const messages = useTranslations(lang);

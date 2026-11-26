@@ -1,0 +1,71 @@
+---
+interface Props { categories: string[]; types: string[]; years: string[] }
+const { categories, types, years } = Astro.props;
+const typeLabels: Record<string, [string, string]> = {
+  'course-completion': ['Course completion', 'Curso completado'],
+  'learning-path': ['Learning path', 'Ruta de aprendizaje'],
+  certificate: ['Certificate', 'Certificado'],
+  'professional-certification': ['Professional certification', 'Certificación profesional'],
+};
+const categoryLabels: Record<string, string> = {
+  'Engineering practices': 'Prácticas de ingeniería',
+  'Frontend engineering': 'Ingeniería frontend',
+  DevOps: 'DevOps',
+  Databases: 'Bases de datos',
+};
+---
+<search class="certification-filters">
+  <form id="certification-filter-form" action="/certifications/" method="get">
+    <div class="filter-search">
+      <label for="credential-search" data-copy-en="Search credentials" data-copy-es="Buscar credenciales">Search credentials</label>
+      <input id="credential-search" name="q" type="search" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="Title, technology, category, or provider" data-placeholder-en="Title, technology, category, or provider" data-placeholder-es="Título, tecnología, categoría o proveedor" />
+    </div>
+    {categories.length > 1 && <div><label for="credential-category" data-copy-en="Category" data-copy-es="Categoría">Category</label><select id="credential-category" name="category"><option value="" data-copy-en="All categories" data-copy-es="Todas las categorías">All categories</option>{categories.map((category)=><option value={category} data-copy-en={category} data-copy-es={categoryLabels[category] ?? category}>{category}</option>)}</select></div>}
+    {types.length > 1 && <div><label for="credential-type" data-copy-en="Credential type" data-copy-es="Tipo de credencial">Credential type</label><select id="credential-type" name="type"><option value="" data-copy-en="All types" data-copy-es="Todos los tipos">All types</option>{types.map((type)=><option value={type} data-copy-en={typeLabels[type]?.[0] ?? type} data-copy-es={typeLabels[type]?.[1] ?? type}>{typeLabels[type]?.[0] ?? type}</option>)}</select></div>}
+    {years.length > 1 && <div><label for="credential-year" data-copy-en="Completion year" data-copy-es="Año de finalización">Completion year</label><select id="credential-year" name="year"><option value="" data-copy-en="All years" data-copy-es="Todos los años">All years</option>{years.map((year)=><option value={year}>{year}</option>)}</select></div>}
+    <div><label for="credential-sort" data-copy-en="Sort" data-copy-es="Ordenar">Sort</label><select id="credential-sort" name="sort"><option value="newest" data-copy-en="Most recent" data-copy-es="Más recientes">Most recent</option><option value="oldest" data-copy-en="Oldest" data-copy-es="Más antiguas">Oldest</option><option value="alphabetical" data-copy-en="Alphabetical" data-copy-es="Orden alfabético">Alphabetical</option></select></div>
+    <button class="filter-clear" type="button" data-clear-filters data-copy-en="Clear filters" data-copy-es="Limpiar filtros">Clear filters</button>
+  </form>
+  <p class="filter-status" data-filter-status aria-live="polite"></p>
+</search>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#certification-filter-form');
+  const list = document.querySelector<HTMLElement>('[data-certification-list]');
+  const status = document.querySelector<HTMLElement>('[data-filter-status]');
+  const empty = document.querySelector<HTMLElement>('[data-certification-empty]');
+  const clear = form?.querySelector<HTMLButtonElement>('[data-clear-filters]');
+  const items = list ? [...list.querySelectorAll<HTMLElement>('[data-certification-item]')] : [];
+
+  const applyFilters = () => {
+    if (!form || !list) return;
+    const data = new FormData(form);
+    const query = String(data.get('q') ?? '').trim().toLocaleLowerCase();
+    const category = String(data.get('category') ?? '');
+    const type = String(data.get('type') ?? '');
+    const year = String(data.get('year') ?? '');
+    const sort = String(data.get('sort') ?? 'newest');
+    let visible = 0;
+    for (const item of items) {
+      const matches = (!query || item.dataset.search?.includes(query)) && (!category || item.dataset.category === category) && (!type || item.dataset.type === type) && (!year || item.dataset.year === year);
+      item.hidden = !matches;
+      if (matches) visible += 1;
+    }
+    const sorted = [...items].sort((left, right) => {
+      if (sort === 'alphabetical') return (left.dataset.title ?? '').localeCompare(right.dataset.title ?? '', document.documentElement.lang);
+      const order = (right.dataset.date ?? '').localeCompare(left.dataset.date ?? '');
+      return sort === 'oldest' ? -order : order;
+    });
+    for (const item of sorted) list.append(item);
+    const spanish = document.documentElement.lang === 'es';
+    if (status) status.textContent = `${visible} ${spanish ? (visible === 1 ? 'credencial visible' : 'credenciales visibles') : (visible === 1 ? 'credential shown' : 'credentials shown')}`;
+    if (empty) empty.hidden = visible !== 0;
+  };
+
+  form?.addEventListener('submit', (event) => { event.preventDefault(); applyFilters(); });
+  form?.addEventListener('input', applyFilters);
+  form?.addEventListener('change', applyFilters);
+  clear?.addEventListener('click', () => { form?.reset(); applyFilters(); form?.querySelector<HTMLInputElement>('input')?.focus(); });
+  document.addEventListener('portfolio:locale-change', applyFilters);
+  applyFilters();
+</script>

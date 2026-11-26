@@ -40,6 +40,12 @@ Body text uses comfortable line height and bounded reading widths. Sizes use rem
 
 The identity uses Johnny's `&lt;/&gt;` tattoo rather than an invented mark. The header combines it with his initials as `JC&lt;/&gt;`; the favicon keeps only `&lt;/&gt;` so the three strokes remain recognizable at 16×16 pixels. Simple SVG paths stay sharp across browser densities and retain contrast against light and dark browser chrome.
 
+## Certifications archive
+
+Certifications extend the publication metaphor rather than introducing an achievement dashboard. Selected credentials use a restrained purple rule; the complete archive uses compact typographic rows, thin separators and mono metadata. Search controls sit on a quiet surface with rectangular native fields. There are no provider-logo walls, diploma mockups, badges, progress bars or gamified totals.
+
+The archive distinguishes course completions, learning paths and professional certifications in language and metadata. Original issued titles remain untouched. On narrow containers, each row becomes a single reading column without changing DOM order.
+
 ## Interaction and accessibility
 
 The header is fixed and its measured height reserves space above the page. Navigation wraps on narrow screens, preserving links without JavaScript. The native theme selector offers system, light, and dark when scripting is available. With scripting disabled the system theme and all navigation remain usable.

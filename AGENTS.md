@@ -44,3 +44,11 @@
 - Keep long-form project translations as separate Content Collection entries linked by `translationId`. Do not publish a Spanish blog translation merely because its English source is published.
 - Translate controls, metadata, dates, alternative text, and document titles—not only visible paragraphs. Label the existing résumé as English in Spanish UI.
 - Because both languages share one canonical document, do not emit misleading reciprocal `hreflang` URLs. Record this owner-selected SEO tradeoff in localization documentation.
+
+## Certification conventions
+
+- Treat external credential data as untrusted. Validate dates, HTTPS URLs, stable IDs, supported types and duplicates before writing or rendering.
+- Keep generated Platzi data, manual credentials and editorial overrides separate. Synchronization may update only `src/data/certifications/platzi.json`.
+- Never label a course completion or learning path as an accredited professional certification. Preserve original credential titles and omit unavailable metadata.
+- Do not add Platzi credentials, cookies or private tokens. Stop automated extraction if the anonymous public mechanism becomes restricted or unreliable.
+- Keep the certifications archive static and complete without JavaScript; search and filtering are progressive enhancements.

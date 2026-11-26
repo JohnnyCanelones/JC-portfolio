@@ -8,20 +8,21 @@ import Experience from '@components/sections/Experience.astro';
 import Expertise from '@components/sections/Expertise.astro';
 import Hero from '@components/sections/Hero.astro';
 import SelectedWork from '@components/sections/SelectedWork.astro';
-import { site } from '@config/site';
+import CertificationsPreview from '@components/sections/CertificationsPreview.astro';
 import BaseLayout from '@layouts/BaseLayout.astro';
 
 const projects = await publishedProjects('en');
 const projectTranslations = await publishedProjects('es');
 ---
 
-<BaseLayout noindex={site.url === 'https://example.com'}>
+<BaseLayout noindex={false}>
   <Header />
   <main id="main-content" class="with-fixed-header">
     <Hero />
     <SelectedWork projects={projects} translations={projectTranslations} />
     <Experience />
     <Expertise />
+    <CertificationsPreview />
     <About />
     <Contact />
   </main>

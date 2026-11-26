@@ -7,6 +7,7 @@
 | 3. Professional content | Static case studies, professional pages, editorial/blog infrastructure, SEO, content verification and QA | Complete; documented QA limitations |
 | 4. Internationalization | Typed English/Spanish copy, same-route language control, localized professional content and QA | Complete; same-URL owner override documented |
 | 5. Launch | Final domain, indexing and deployment approval | Not started |
+| 6. Certifications | Validated credential archive, public Platzi synchronization, filters and scheduled PR workflow | Complete locally; workflow requires repository permission verification |
 
 ## Phase 1 decisions
 
@@ -59,3 +60,17 @@ Missing optional material and launch prerequisites are tracked in `docs/content-
 - [x] `pnpm validate` passes with the static twelve-page output.
 
 The original `/es` routing requirement was superseded by the owner's explicit request to keep one route and switch keyed copy in place. This removes locale-specific canonicals and `hreflang`; English remains the crawlable static fallback. See `docs/localization-review.md`.
+
+## Phase 6 delivery
+
+- [x] Researched the public profile, anonymous pagination, documented Business API, terms and robots directives.
+- [x] Imported 32 course completions and one learning path with public diploma verification URLs.
+- [x] Added validated generated, manual and override data layers with stable IDs and atomic synchronization.
+- [x] Added dry-run, bounded retries, timeouts, pagination limits, incomplete-response protection and preservation of missing records.
+- [x] Added same-route bilingual `/certifications/`, native search/filter/sort controls and JavaScript-disabled fallback.
+- [x] Added four explicitly configured featured credentials and a compact homepage preview.
+- [x] Added static metadata, structured credential data and sitemap integration.
+- [x] Added daily/manual GitHub Actions automation that validates and opens a content PR only on change.
+- [x] Added fixture-based extraction, validation, override and idempotency tests.
+
+The requested `/es/certifications` route was not created because the owner-established permanent localization convention requires the same URL for both languages. The undocumented Platzi personal-profile endpoint is isolated behind an adapter and documented as a maintenance risk.

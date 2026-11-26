@@ -1,0 +1,43 @@
+name: Sync Platzi credentials
+
+on:
+  schedule:
+    - cron: "23 7 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sync-platzi
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.23.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm sync:platzi
+      - run: pnpm validate
+      - name: Create update pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: automation/platzi-credentials
+          delete-branch: true
+          commit-message: "content: sync Platzi credentials"
+          title: "Content: sync Platzi credentials"
+          body: |
+            Automated update from Johnny Canelones's public Platzi profile.
+
+            The workflow preserves manual credentials and overrides, validates the dataset, and opens this pull request only when meaningful content changed.
+          add-paths: src/data/certifications/platzi.json

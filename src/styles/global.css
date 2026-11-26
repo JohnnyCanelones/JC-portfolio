@@ -114,7 +114,8 @@ a {
   text-decoration: none;
 }
 button,
-select {
+select,
+input {
   font: inherit;
 }
 ::selection {
@@ -290,7 +291,8 @@ select {
 .language-switcher :where(button:hover, button:focus-visible) {
   color: var(--foreground);
 }
-.language-switcher :where(button.active, button[aria-pressed="true"]) {
+.language-switcher button.active,
+.language-switcher button[aria-pressed="true"] {
   border-color: var(--accent-solid);
   background: var(--accent-solid);
   color: var(--accent-on-solid);
@@ -812,6 +814,166 @@ select {
   padding-block: var(--section-space);
 }
 
+.certifications-page {
+  container: certifications / inline-size;
+  padding-block: clamp(4rem, 7vw, 7rem);
+}
+.certifications-intro {
+  max-inline-size: var(--reading-width);
+  margin-block-end: clamp(4rem, 8vw, 7rem);
+}
+.certifications-intro h1 {
+  max-inline-size: 14ch;
+  margin-block: 0.75rem 1.25rem;
+  font-family: var(--type-serif);
+  font-size: var(--page-size);
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  line-height: 1.05;
+}
+.certifications-intro > p:not(.section-kicker) {
+  max-inline-size: 62ch;
+  color: var(--muted-foreground);
+}
+.certifications-intro .text-link {
+  margin-block-start: 1.5rem;
+}
+.certifications-page > section {
+  border-block-start: 1px solid var(--border);
+  padding-block: clamp(3.5rem, 7vw, 6rem);
+}
+.certification-section-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+  gap: 1.5rem 3rem;
+  margin-block-end: 2.5rem;
+}
+.certification-section-heading h2 {
+  max-inline-size: 18ch;
+  margin: 0;
+  font-family: var(--type-serif);
+  font-size: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 1.1;
+}
+.certification-list {
+  margin: 0;
+  padding: 0;
+  border-block-start: 1px solid var(--border);
+  list-style: none;
+}
+.certification-item {
+  border-block-end: 1px solid var(--border);
+  padding-block: 1.5rem;
+}
+.certification-item article {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 0.7rem 2rem;
+  align-items: start;
+}
+.certification-item h2,
+.certification-item h3 {
+  min-inline-size: 0;
+  margin: 0;
+  font-size: clamp(1.05rem, 0.95rem + 0.35vw, 1.3rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.35;
+}
+.certification-meta,
+.certification-detail {
+  color: var(--muted-foreground);
+  font-family: var(--type-mono);
+  font-size: var(--meta-size);
+  line-height: 1.65;
+}
+.certification-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.45rem;
+}
+.certification-detail {
+  margin: 0;
+}
+.certification-links {
+  grid-column: 2 / -1;
+}
+.certification-links .text-link {
+  font-size: 0.78rem;
+}
+.certification-list-featured .certification-item {
+  border-inline-start: 2px solid var(--accent);
+  padding-inline-start: clamp(1rem, 2vw, 1.5rem);
+}
+.certification-filters {
+  display: block;
+  margin-block-end: 2rem;
+  border-block: 1px solid var(--border);
+  background: var(--surface);
+  padding: clamp(1rem, 2.5vw, 1.5rem);
+}
+:root:not(.js) .certification-filters {
+  display: none;
+}
+.certification-filters form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+  gap: 1rem;
+  align-items: end;
+}
+.certification-filters form > div {
+  min-inline-size: 0;
+}
+.certification-filters label {
+  display: block;
+  margin-block-end: 0.35rem;
+  font-family: var(--type-mono);
+  font-size: var(--meta-size);
+}
+.certification-filters input,
+.certification-filters select,
+.filter-clear {
+  inline-size: 100%;
+  min-block-size: 3rem;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  background: var(--background);
+  color: var(--foreground);
+  padding-inline: 0.75rem;
+  font-size: max(1rem, 1em);
+}
+.filter-clear {
+  background: var(--accent-solid);
+  color: var(--accent-on-solid);
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.filter-status {
+  margin-block: 1rem 0;
+  color: var(--muted-foreground);
+  font-family: var(--type-mono);
+  font-size: var(--meta-size);
+}
+.learning-paths {
+  margin-block-end: 2rem;
+}
+.certification-more {
+  margin-block-start: 2rem;
+}
+
+@container certifications (inline-size < 48rem) {
+  .certification-section-heading,
+  .certification-item article {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .certification-links {
+    grid-column: auto;
+  }
+}
+
 @media (max-width: 48rem) {
   :root {
     --header-height: 8.75rem;
@@ -820,6 +982,9 @@ select {
     order: 3;
     inline-size: 100%;
     margin-inline-start: 0;
+  }
+  .nav-certifications {
+    display: none;
   }
   .nav-list {
     justify-content: space-between;
@@ -879,7 +1044,10 @@ select {
 @media (pointer: coarse) {
   .nav-list a,
   .text-link,
-  .theme-control select {
+  .theme-control select,
+  .certification-filters input,
+  .certification-filters select,
+  .filter-clear {
     min-block-size: 2.75rem;
   }
 }
@@ -909,7 +1077,8 @@ select {
   .text-link {
     color: LinkText;
   }
-  .language-switcher :where(button.active, button[aria-pressed="true"]) {
+  .language-switcher button.active,
+  .language-switcher button[aria-pressed="true"] {
     border-color: CanvasText;
     background: Highlight;
     color: HighlightText;

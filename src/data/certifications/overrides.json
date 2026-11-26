@@ -1,0 +1,26 @@
+{
+  "platzi-course-11059": {
+    "featured": true,
+    "category": "Engineering practices",
+    "technologies": ["Git", "GitHub"]
+  },
+  "platzi-course-11553": {
+    "featured": true,
+    "category": "Frontend engineering",
+    "technologies": ["Next.js", "React"]
+  },
+  "platzi-course-2495": {
+    "featured": true,
+    "category": "Frontend engineering",
+    "technologies": ["Angular", "REST APIs"]
+  },
+  "platzi-course-1432": {
+    "featured": true,
+    "category": "DevOps",
+    "technologies": ["Docker"]
+  },
+  "platzi-course-1183": {
+    "category": "Databases",
+    "technologies": ["Databases"]
+  }
+}
