@@ -3,10 +3,25 @@
   "sourceUrl": "https://platzi.com/p/johnnyCanelones/",
   "extractionStrategy": "public-profile-and-anonymous-pagination",
   "profileSummary": {
-    "courseCount": 32,
+    "courseCount": 33,
     "learningPathCount": 1
   },
   "credentials": [
+    {
+      "id": "platzi-course-12286",
+      "provider": "Platzi",
+      "title": "Curso de Fundamentos de Python",
+      "slug": "fundamentos-python",
+      "technologies": [],
+      "completedAt": "2026-11-26T03:37:29.494Z",
+      "courseUrl": "https://platzi.com/cursos/fundamentos-python/",
+      "certificateUrl": "https://platzi.com/p/johnnyCanelones/curso/12286-course/diploma/detalle/",
+      "credentialId": "fd837881-b644-4c8f-9a50-acc15eb764bd",
+      "credentialType": "course-completion",
+      "verificationStatus": "publicly-verifiable",
+      "featured": false,
+      "sourceUrl": "https://platzi.com/p/johnnyCanelones/"
+    },
     {
       "id": "platzi-course-11059",
       "provider": "Platzi",
