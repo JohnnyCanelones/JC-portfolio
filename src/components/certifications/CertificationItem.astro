@@ -1,0 +1,40 @@
+---
+import type { Certification } from '@lib/certifications/schema';
+import { formatDate } from '@i18n/formatters';
+interface Props { credential: Certification; headingLevel?: 'h2' | 'h3' }
+const { credential, headingLevel = 'h3' } = Astro.props;
+const Heading = headingLevel;
+const typeLabels = {
+  'course-completion': ['Course completion', 'Curso completado'],
+  certificate: ['Certificate', 'Certificado'],
+  'learning-path': ['Learning path', 'Ruta de aprendizaje'],
+  'professional-certification': ['Professional certification', 'Certificación profesional'],
+} as const;
+const type = typeLabels[credential.credentialType];
+const categoryLabels: Record<string, string> = {
+  'Engineering practices': 'Prácticas de ingeniería',
+  'Frontend engineering': 'Ingeniería frontend',
+  DevOps: 'DevOps',
+  Databases: 'Bases de datos',
+};
+const categoryEs = credential.category ? categoryLabels[credential.category] ?? credential.category : undefined;
+const dateEn = credential.completedAt ? formatDate('en', new Date(credential.completedAt)) : undefined;
+const dateEs = credential.completedAt ? formatDate('es', new Date(credential.completedAt)) : undefined;
+const search = [credential.title, credential.provider, credential.category, ...credential.technologies].filter(Boolean).join(' ').toLocaleLowerCase();
+---
+<li class="certification-item" data-certification-item data-search={search} data-category={credential.category ?? ''} data-provider={credential.provider} data-type={credential.credentialType} data-year={credential.completedAt?.slice(0,4) ?? ''} data-date={credential.completedAt ?? ''} data-title={credential.title}>
+  <article>
+    <div class="certification-meta">
+      <span>{credential.provider}</span><span aria-hidden="true">·</span>
+      <span data-copy-en={type[0]} data-copy-es={type[1]}>{type[0]}</span>
+      {dateEn && <><span aria-hidden="true">·</span><time datetime={credential.completedAt} data-copy-en={dateEn} data-copy-es={dateEs}>{dateEn}</time></>}
+    </div>
+    <Heading>{credential.title}</Heading>
+    {(credential.category || credential.technologies.length > 0) && <p class="certification-detail">{credential.category && <span data-copy-en={credential.category} data-copy-es={categoryEs}>{credential.category}</span>}{credential.category && credential.technologies.length > 0 && <span aria-hidden="true"> · </span>}{credential.technologies.length > 0 && <span>{credential.technologies.join(' · ')}</span>}</p>}
+    <div class="certification-links">
+      {credential.certificateUrl
+        ? <a class="text-link" href={credential.certificateUrl} rel="external"><span data-copy-en="Verify credential" data-copy-es="Verificar credencial">Verify credential</span><span aria-hidden="true">↗</span></a>
+        : credential.courseUrl && <a class="text-link" href={credential.courseUrl} rel="external"><span data-copy-en="View course" data-copy-es="Ver curso">View course</span><span aria-hidden="true">↗</span></a>}
+    </div>
+  </article>
+</li>

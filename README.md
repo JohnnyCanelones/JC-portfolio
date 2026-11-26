@@ -2,7 +2,9 @@
 
 A static, editorial portfolio for a full-stack software engineer. The homepage and six technical cases support English and Spanish on the same public URLs; professional pages cover experience, background and contact.
 
-Phase 2 is complete locally. The production build passed `pnpm validate` and scored 100 / 100 / 100 / 66 in a mobile Lighthouse lab run (Performance / Accessibility / Best Practices / SEO). The SEO score reflects deliberate `noindex` protection before a real domain is configured; see [docs/web-standards.md](docs/web-standards.md) for measurements and test limits.
+The portfolio also includes a static certifications archive synchronized from Johnny's public Platzi profile. Generated records, manual credentials and editorial overrides remain separate; see [docs/certifications-integration.md](docs/certifications-integration.md).
+
+Phase 2 is complete locally. Its production build passed `pnpm validate` and scored 100 / 100 / 100 / 66 in a historical mobile Lighthouse lab run (Performance / Accessibility / Best Practices / SEO). That run predates the configured production domain and current content; see [docs/web-standards.md](docs/web-standards.md) for measurements and test limits.
 
 ## Stack
 
@@ -31,6 +33,9 @@ pnpm dev
 | `pnpm format` | Format supported files |
 | `pnpm format:check` | Check formatting |
 | `pnpm validate` | Run format, lint, check, and build |
+| `pnpm sync:platzi --dry-run` | Preview public Platzi credential changes |
+| `pnpm sync:platzi` | Validate and atomically update the local Platzi dataset |
+| `pnpm test:certifications` | Run fixture-based integration tests |
 
 This Codex desktop environment's bundled Node binary restricts native addons. Local validation here uses an ad hoc signed copy of the same binary in `/tmp`; normal installations do not need that workaround.
 
@@ -46,6 +51,7 @@ This Codex desktop environment's bundled Node binary restricts native addons. Lo
 - `src/layouts/BaseLayout.astro`: document metadata, font preload, color scheme initialization, and skip link.
 - `src/styles/global.css`: light and dark semantic tokens, Tailwind bridge, typography, and editorial layout.
 - `src/i18n/`: typed domain dictionaries, date formatters and same-route locale helpers.
+- `src/data/certifications/`: generated Platzi records, manual credentials and persistent editorial overrides.
 
 Employment facts come from Johnny's supplied résumé. WealthOS details were supplied in the Phase 2 brief; Johnny supplied its sign-in screenshot and public URL. He also supplied two screenshots and URLs for Green Jurisdictions Database and Tropical Fire Observatory, which appear as one project with two linked gallery slides. TTB and ISM are grouped as the most recent selected-work entry, with separate public links. Breeze and GlobalFinances have their supplied public links.
 
@@ -63,11 +69,11 @@ The EN/ES control switches keyed interface copy and localized case-study content
 
 The output is static `dist/`, suitable for Vercel static hosting. CI validates pull requests and pushes to `main`; it does not deploy. Before deploying:
 
-1. Replace `https://example.com` in `src/config/site.ts` with the real domain.
+1. Verify that `https://johnnycanelones.dev` is connected to the intended production project.
 2. Provide a verified GitHub URL if it should appear.
-3. Review the downloadable resumeat `public/resume.pdf`; it contains a phone number.
+3. Review the downloadable resume at `public/resume.pdf`; it contains a phone number.
 4. Replace the provisional social sharing image, add real screenshots for remaining projects where permitted, and review content with Johnny.
-5. Remove the homepage's temporary `noindex` condition and review `public/robots.txt`, which currently disallows crawling.
+5. Review `public/robots.txt`, which still disallows crawling pending explicit launch approval.
 
 No deployment has been performed.
 

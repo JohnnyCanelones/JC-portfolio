@@ -1,0 +1,28 @@
+---
+import CertificationFilters from '@components/certifications/CertificationFilters.astro';
+import CertificationItem from '@components/certifications/CertificationItem.astro';
+import { site } from '@config/site';
+import { useTranslations } from '@i18n';
+import PageLayout from '@layouts/PageLayout.astro';
+import { getCertifications, getFeaturedCertifications } from '@lib/certifications/repository';
+const en = useTranslations('en'); const es = useTranslations('es');
+const credentials = getCertifications();
+const featured = getFeaturedCertifications(4);
+const learningPaths = credentials.filter((credential)=>credential.credentialType === 'learning-path');
+const archiveCredentials = credentials.filter((credential)=>credential.credentialType !== 'learning-path');
+const categories = [...new Set(archiveCredentials.map((credential)=>credential.category).filter((value): value is string=>Boolean(value)))].sort();
+const types = [...new Set(archiveCredentials.map((credential)=>credential.credentialType))].sort();
+const years = [...new Set(archiveCredentials.map((credential)=>credential.completedAt?.slice(0,4)).filter((value): value is string=>Boolean(value)))].sort().reverse();
+const structuredData = {
+  '@context':'https://schema.org', '@type':'CollectionPage', name:en.certifications.pageTitle, url:`${site.url}/certifications/`,
+  mainEntity:{'@type':'ItemList',numberOfItems:credentials.length,itemListElement:credentials.map((credential,index)=>({'@type':'ListItem',position:index+1,item:{'@type':'EducationalOccupationalCredential',name:credential.title,credentialCategory:credential.credentialType,recognizedBy:{'@type':'Organization',name:credential.provider},url:credential.certificateUrl ?? credential.courseUrl}}))},
+};
+---
+<PageLayout title={en.certifications.pageTitle} localizedTitle={es.certifications.pageTitle} description={en.certifications.pageDescription} localizedDescription={es.certifications.pageDescription} structuredData={structuredData}>
+  <div class="page-container certifications-page">
+    <header class="certifications-intro"><p class="section-kicker" data-copy-en={en.certifications.kicker} data-copy-es={es.certifications.kicker}>{en.certifications.kicker}</p><h1 data-copy-en={en.certifications.heading} data-copy-es={es.certifications.heading}>{en.certifications.heading}</h1><p data-copy-en={en.certifications.intro} data-copy-es={es.certifications.intro}>{en.certifications.intro}</p><a class="text-link" href="https://platzi.com/p/johnnyCanelones/" rel="external"><span data-copy-en={en.certifications.profile} data-copy-es={es.certifications.profile}>{en.certifications.profile}</span><span aria-hidden="true">↗</span></a></header>
+    {featured.length > 0 && <section aria-labelledby="featured-certifications-title"><div class="certification-section-heading"><p class="section-kicker" data-copy-en={en.certifications.featuredKicker} data-copy-es={es.certifications.featuredKicker}>{en.certifications.featuredKicker}</p><h2 id="featured-certifications-title" data-copy-en={en.certifications.featuredTitle} data-copy-es={es.certifications.featuredTitle}>{en.certifications.featuredTitle}</h2></div><ul class="certification-list certification-list-featured">{featured.map((credential)=><CertificationItem credential={credential} />)}</ul></section>}
+    <section class="certification-archive" aria-labelledby="certification-archive-title"><div class="certification-section-heading"><p class="section-kicker" data-copy-en="Archive" data-copy-es="Archivo">Archive</p><h2 id="certification-archive-title" data-copy-en={en.certifications.archiveTitle} data-copy-es={es.certifications.archiveTitle}>{en.certifications.archiveTitle}</h2></div><CertificationFilters categories={categories} types={types} years={years} /><ul class="certification-list" data-certification-list>{archiveCredentials.map((credential)=><CertificationItem credential={credential} />)}</ul><p data-certification-empty hidden data-copy-en={en.certifications.empty} data-copy-es={es.certifications.empty}>{en.certifications.empty}</p></section>
+    {learningPaths.length > 0 && <section class="learning-paths" aria-labelledby="learning-paths-title"><div class="certification-section-heading"><p class="section-kicker">Platzi</p><h2 id="learning-paths-title" data-copy-en={en.certifications.learningPathsTitle} data-copy-es={es.certifications.learningPathsTitle}>{en.certifications.learningPathsTitle}</h2></div><ul class="certification-list">{learningPaths.map((credential)=><CertificationItem credential={credential} />)}</ul></section>}
+  </div>
+</PageLayout>

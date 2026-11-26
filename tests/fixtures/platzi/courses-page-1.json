@@ -1,0 +1,17 @@
+{
+  "data": {
+    "courses": [
+      {
+        "id": 10,
+        "title": "  Curso de Prueba  ",
+        "slug": "curso-prueba",
+        "diploma": {
+          "diploma_url": "https://platzi.com/p/example/curso/10-course/diploma/detalle/",
+          "approved_date": "2025-01-02T03:04:05.000Z",
+          "linkedin_share": "https://www.linkedin.com/profile/add?certId=credential-10"
+        }
+      }
+    ]
+  },
+  "metadata": { "count": 2, "pages": 2, "current_page": 1 }
+}

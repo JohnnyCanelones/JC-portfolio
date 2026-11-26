@@ -1,0 +1,14 @@
+---
+import CertificationItem from '@components/certifications/CertificationItem.astro';
+import { getFeaturedCertifications } from '@lib/certifications/repository';
+import { useTranslations } from '@i18n';
+const credentials = getFeaturedCertifications(4);
+const en = useTranslations('en'); const es = useTranslations('es');
+---
+{credentials.length > 0 && <section class="section certifications-preview" aria-labelledby="certifications-preview-title">
+  <div class="page-container">
+    <div class="section-head"><p class="section-kicker" data-copy-en={en.certifications.featuredKicker} data-copy-es={es.certifications.featuredKicker}>{en.certifications.featuredKicker}</p><div><h2 id="certifications-preview-title" class="section-title" data-copy-en={en.certifications.featuredTitle} data-copy-es={es.certifications.featuredTitle}>{en.certifications.featuredTitle}</h2><p class="section-intro" data-copy-en={en.certifications.previewIntro} data-copy-es={es.certifications.previewIntro}>{en.certifications.previewIntro}</p></div></div>
+    <ul class="certification-list certification-list-compact">{credentials.map((credential)=><CertificationItem credential={credential} />)}</ul>
+    <a class="text-link certification-more" href="/certifications/"><span data-copy-en={en.certifications.viewAll} data-copy-es={es.certifications.viewAll}>{en.certifications.viewAll}</span><span aria-hidden="true">↗</span></a>
+  </div>
+</section>}

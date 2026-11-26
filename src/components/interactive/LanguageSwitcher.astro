@@ -22,6 +22,9 @@
     document.querySelectorAll<HTMLElement>('[data-label-en][data-label-es]').forEach((element) => {
       element.setAttribute('aria-label', locale === 'es' ? element.dataset.labelEs ?? '' : element.dataset.labelEn ?? '');
     });
+    document.querySelectorAll<HTMLInputElement>('[data-placeholder-en][data-placeholder-es]').forEach((element) => {
+      element.placeholder = locale === 'es' ? element.dataset.placeholderEs ?? '' : element.dataset.placeholderEn ?? '';
+    });
     document.querySelectorAll<HTMLImageElement>('[data-alt-en][data-alt-es]').forEach((image) => {
       image.alt = locale === 'es' ? image.dataset.altEs ?? '' : image.dataset.altEn ?? '';
     });

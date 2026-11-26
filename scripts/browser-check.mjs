@@ -6,7 +6,7 @@ const playwright = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const chromium = playwright.chromium ?? playwright.default?.chromium;
 assert.ok(chromium, 'Chromium is unavailable from the configured Playwright module');
 const base = process.env.QA_URL || 'http://127.0.0.1:4322';
-const output = process.env.QA_OUTPUT || '/tmp/portfolio-phase3-qa';
+const output = process.env.QA_OUTPUT || '/tmp/portfolio-phase6-qa';
 await mkdir(output, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const routes = [
@@ -16,6 +16,7 @@ const routes = [
   '/experience/',
   '/about/',
   '/contact/',
+  '/certifications/',
 ];
 const results = [];
 try {
@@ -57,6 +58,18 @@ try {
         await page.locator('[data-locale-choice="en"]').getAttribute('aria-pressed'),
         'false',
       );
+      const localeStyles = await page.evaluate(() => {
+        const active = document.querySelector('[data-locale-choice="es"]');
+        const inactive = document.querySelector('[data-locale-choice="en"]');
+        return {
+          activeBackground: active ? getComputedStyle(active).backgroundColor : '',
+          inactiveBackground: inactive ? getComputedStyle(inactive).backgroundColor : '',
+          activeColor: active ? getComputedStyle(active).color : '',
+          inactiveColor: inactive ? getComputedStyle(inactive).color : '',
+        };
+      });
+      assert.notEqual(localeStyles.activeBackground, localeStyles.inactiveBackground);
+      assert.notEqual(localeStyles.activeColor, localeStyles.inactiveColor);
       assert.equal(
         await page.evaluate(
           () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
@@ -113,6 +126,29 @@ try {
   );
   await page.keyboard.press('Enter');
   assert.equal(await page.evaluate(() => document.activeElement?.id), 'main-content');
+
+  await page.goto(`${base}/certifications/`);
+  assert.equal(
+    await page.locator('[data-certification-list] [data-certification-item]').count(),
+    32,
+  );
+  await page.locator('#credential-search').fill('Next.js');
+  assert.equal(
+    await page.locator('[data-certification-list] [data-certification-item]:visible').count(),
+    1,
+  );
+  assert.match(await page.locator('[data-filter-status]').textContent(), /1 credential shown/);
+  await page.locator('[data-locale-choice="es"]').click();
+  assert.equal(
+    await page.locator('#credential-search').getAttribute('placeholder'),
+    'Título, tecnología, categoría o proveedor',
+  );
+  assert.match(await page.locator('[data-filter-status]').textContent(), /1 credencial visible/);
+  await page.locator('[data-clear-filters]').click();
+  assert.equal(
+    await page.locator('[data-certification-list] [data-certification-item]:visible').count(),
+    32,
+  );
   await context.close();
   const noScript = await browser.newContext({
     javaScriptEnabled: false,
@@ -125,6 +161,12 @@ try {
   assert.ok(plain.url().endsWith('#architecture'));
   await plain.getByRole('link', { name: 'Contact', exact: true }).click();
   assert.ok(plain.url().endsWith('/#contact'));
+  await plain.goto(`${base}/certifications/`);
+  assert.equal(await plain.locator('[data-certification-item]').count(), 37);
+  assert.equal(
+    await plain.locator('.certification-filters').evaluate((el) => getComputedStyle(el).display),
+    'none',
+  );
   await noScript.close();
   await writeFile(
     `${output}/results.json`,
@@ -136,6 +178,7 @@ try {
         keyboardSkipLink: true,
         nativeToc: true,
         noJavaScript: true,
+        certificationFilters: true,
       },
       null,
       2,

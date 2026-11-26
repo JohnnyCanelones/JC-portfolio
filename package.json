@@ -15,7 +15,9 @@
     "format": "biome format --write .",
     "format:check": "biome format .",
     "validate": "pnpm format:check && pnpm lint && pnpm check && pnpm build && pnpm test",
-    "test": "node --test scripts/content-policy.test.mjs && python3 scripts/check-output.py",
+    "test": "node --test scripts/content-policy.test.mjs scripts/certifications/certifications.test.ts && python3 scripts/check-output.py",
+    "test:certifications": "node --test scripts/certifications/certifications.test.ts",
+    "sync:platzi": "node scripts/certifications/sync-platzi.ts",
     "test:publishing": "python3 scripts/check-publication.py"
   },
   "dependencies": {
@@ -35,6 +37,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
     "@biomejs/biome": "2.6.9",
+    "@types/node": "^26.6.7",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "typescript": "6.0.3"

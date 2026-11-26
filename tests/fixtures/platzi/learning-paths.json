@@ -1,0 +1,17 @@
+{
+  "data": {
+    "learning_paths": [
+      {
+        "id": 20,
+        "title": "Ruta de Prueba",
+        "slug": "ruta-prueba",
+        "url": "https://platzi.com/ruta/ruta-prueba/",
+        "diploma": {
+          "diploma_url": "https://platzi.com/p/example/ruta/20-ruta/diploma/detalle/",
+          "approved_date": "2024-01-01T00:00:00.000Z"
+        }
+      }
+    ]
+  },
+  "metadata": { "count": 1, "pages": 1, "current_page": 1 }
+}

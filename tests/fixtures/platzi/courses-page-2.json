@@ -1,0 +1,6 @@
+{
+  "data": {
+    "courses": [{ "id": 11, "title": "Curso sin diploma", "slug": "sin-diploma", "diploma": null }]
+  },
+  "metadata": { "count": 2, "pages": 2, "current_page": 2 }
+}
